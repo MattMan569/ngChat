@@ -1,1 +1,27 @@
-<p>login works!</p>
+<form [formGroup]="form" (submit)="onLogin()">
+  <mat-form-field>
+    <input
+      matInput
+      type="text"
+      placeholder="Username"
+      formControlName="username"
+    />
+    <mat-error *ngIf="form.get('username').invalid">
+      Please enter your username
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      type="text"
+      placeholder="Password"
+      formControlName="password"
+    />
+    <mat-error *ngIf="form.get('password').invalid">
+      Please enter your password
+    </mat-error>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Login</button>
+</form>

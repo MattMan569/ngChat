@@ -1,1 +1,51 @@
-<p>signup works!</p>
+<form [formGroup]="form" (submit)="onSignup()">
+  <mat-form-field>
+    <input
+      matInput
+      type="text"
+      placeholder="Username"
+      formControlName="username"
+    />
+    <mat-error *ngIf="form.get('username').invalid">
+      Usernames must be at least 5 characters long
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      type="email"
+      placeholder="Email"
+      formControlName="email"
+    />
+    <mat-error *ngIf="form.get('email').invalid">
+      Please enter a valid email
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      type="password"
+      placeholder="Password"
+      formControlName="password"
+    />
+    <mat-error *ngIf="form.get('password').invalid">
+      Passwords must be at least 8 characters long
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      type="password"
+      placeholder="Confirm Password"
+      formControlName="confirmPassword"
+    />
+    <mat-error *ngIf="form.get('confirmPassword').invalid">
+      Passwords do not match
+    </mat-error>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Signup</button>
+</form>

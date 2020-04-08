@@ -1,0 +1,65 @@
+<mat-card>
+  <form autocomplete="off" [formGroup]="form" (submit)="onCreateRoom()">
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        placeholder="Room Name"
+        formControlName="name"
+      />
+      <mat-error *ngIf="form.get('name').invalid">
+        Room name must be between 3 and 64 characters long
+      </mat-error>
+    </mat-form-field>
+
+    <mat-checkbox
+      (change)="onLockChange()"
+      formControlName="isLocked"
+      labelPosition="before"
+      [ngClass]="{ 'margin-bottom': !form.controls.isLocked.value }"
+    >
+      Lock Room
+    </mat-checkbox>
+
+    <mat-form-field *ngIf="isLocked">
+      <input
+        matInput
+        type="text"
+        placeholder="Password (optional)"
+        formControlName="password"
+        (blur)="onPasswordChange()"
+      />
+      <mat-error *ngIf="form.get('password').invalid">
+        Locked rooms must have a password
+      </mat-error>
+    </mat-form-field>
+
+    <mat-checkbox
+      (change)="onLimitedChange()"
+      formControlName="isLimited"
+      labelPosition="before"
+    >
+      Limited Capacity
+    </mat-checkbox>
+
+    <mat-slider
+      *ngIf="isLimited"
+      formControlName="capacity"
+      thumbLabel="true"
+    ></mat-slider>
+
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        placeholder="Tags (optional)"
+        formControlName="tags"
+      />
+      <mat-hint>
+        A space separated list of tags, to make your room easier to search for
+      </mat-hint>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Create</button>
+  </form>
+</mat-card>

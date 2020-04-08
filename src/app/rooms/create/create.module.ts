@@ -3,18 +3,18 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from 'src/app/angular-material.module';
+import { CreateRoutingModule } from './create-routing.module';
 
-import { SignupRoutingModule } from './signup-routing.module';
-import { SignupComponent } from './signup.component';
+import { CreateComponent } from './create.component';
 
 
 @NgModule({
-  declarations: [SignupComponent],
+  declarations: [CreateComponent],
   imports: [
     CommonModule,
-    SignupRoutingModule,
-    AngularMaterialModule,
+    CreateRoutingModule,
     ReactiveFormsModule,
+    AngularMaterialModule,
   ],
 })
-export class SignupModule { }
+export class CreateModule { }

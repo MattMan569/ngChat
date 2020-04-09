@@ -21,6 +21,7 @@ export class SignupComponent implements OnInit {
         validators: [
           Validators.required,
           Validators.minLength(5),
+          Validators.maxLength(32),
         ],
       }),
       email: new FormControl(

@@ -2,8 +2,11 @@
   "name": "ng-chat",
   "version": "0.0.0",
   "scripts": {
+    "serve": "npm-run-all --parallel start:*",
     "ng": "ng",
     "start": "ng serve",
+    "start:app": "ng serve",
+    "start:server": "npm run --prefix ./server serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -42,9 +45,8 @@
     "karma-coverage-istanbul-reporter": "~2.1.0",
     "karma-jasmine": "~3.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
-    "nodemon": "^2.0.2",
+    "npm-run-all": "^4.1.5",
     "protractor": "~5.4.3",
-    "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~3.8.3"
   }

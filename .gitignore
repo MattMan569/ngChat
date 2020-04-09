@@ -1,7 +1,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # Don't upload environment variables
-nodemon.json
+/server/env/.env
 
 # compiled output
 /dist
@@ -12,6 +12,7 @@ nodemon.json
 
 # dependencies
 /node_modules
+/server/node_modules
 
 # profiling files
 chrome-profiler-events*.json

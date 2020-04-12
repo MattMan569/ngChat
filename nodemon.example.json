@@ -1,8 +1,0 @@
-{
-  "documentation": "https://github.com/remy/nodemon/blob/master/doc/sample-nodemon.md",
-  "todo": "create a nodemon.json file",
-  "env": {
-    "KEY": "value",
-    "accessWith": "process.env.KEY"
-  }
-}

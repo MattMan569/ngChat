@@ -4,6 +4,7 @@ import jwtUtil from '../util/jwt';
 
 import User from './../../models/userModel';
 import ISignupData from 'types/signupData';
+import ITokenPayload from 'types/tokenPayload';
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -45,7 +46,16 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const token = jwtUtil.encodeAccessToken(user.username, user.email, user._id);
 
-    res.json(token);
+    const response = {
+      token,
+      payload: {
+        username: user.username,
+        email: user.email,
+        _id: user._id,
+      } as ITokenPayload,
+    };
+
+    res.json(response);
   } catch (error) {
     // TODO
     console.error(error);

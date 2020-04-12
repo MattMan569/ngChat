@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 class Database {
-  private error: string;
+  private error: any;
 
   constructor() {
     this.error = '';
@@ -22,6 +22,7 @@ class Database {
 
       return true;
     } catch (error) {
+      this.error = error;
       return false;
     }
   }

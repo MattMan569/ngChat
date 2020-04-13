@@ -14,7 +14,10 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "types/*": ["./types/*"]
+    },
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

@@ -4,7 +4,7 @@ import jwtUtil from '../util/jwt';
 
 import User from './../../models/userModel';
 import ISignupData from 'types/signupData';
-import ITokenPayload from 'types/tokenPayload';
+import ILoginResponse from 'types/loginResponse';
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -44,15 +44,21 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(401).json('Password is incorrect');
     }
 
-    const token = jwtUtil.encodeAccessToken(user.username, user.email, user._id);
+    if (!process.env.JWT_EXPIRES_IN) {
+      throw new Error('Environment variable JWT_EXPIRES_IN is undefined.');
+    }
 
-    const response = {
+    const token = jwtUtil.encodeAccessToken(user.username, user.email, user._id);
+    const expires = new Date(Date.now() + parseInt(process.env.JWT_EXPIRES_IN, 10)).toISOString();
+
+    const response: ILoginResponse = {
       token,
       payload: {
         username: user.username,
         email: user.email,
         _id: user._id,
-      } as ITokenPayload,
+        expires,
+      },
     };
 
     res.json(response);

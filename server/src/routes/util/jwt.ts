@@ -11,12 +11,16 @@ export const encodeAccessToken = (
     throw new Error('Environment variable JWT_SECRET is undefined.');
   }
 
+  if (!process.env.JWT_EXPIRES_IN) {
+    throw new Error('Environment variable JWT_EXPIRES_IN is undefined.');
+  }
+
   const token = jwt.sign({
     username,
     email,
     _id: id,
   } as ITokenPayload, process.env.JWT_SECRET, {
-    expiresIn: '1h',
+    expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
   return token;

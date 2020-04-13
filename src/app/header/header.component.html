@@ -8,19 +8,39 @@
 
     <ul>
       <li>
-        <a mat-button routerLink="/auth/login" routerLinkActive="mat-flat-button" >
+        <a
+          mat-button
+          routerLink="/auth/login"
+          routerLinkActive="mat-flat-button"
+          *ngIf="!isAuthenticated"
+        >
           Login
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/auth/signup" routerLinkActive="mat-flat-button" >
+        <a
+          mat-button
+          routerLink="/auth/signup"
+          routerLinkActive="mat-flat-button"
+          *ngIf="!isAuthenticated"
+        >
           Signup
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/rooms/create" routerLinkActive="mat-flat-button" >
+        <a
+          mat-button
+          routerLink="/rooms/create"
+          routerLinkActive="mat-flat-button"
+          *ngIf="isAuthenticated"
+        >
           Create Room
         </a>
+      </li>
+      <li>
+        <button mat-button (click)="onLogout()" *ngIf="isAuthenticated">
+          Logout
+        </button>
       </li>
     </ul>
   </mat-toolbar>

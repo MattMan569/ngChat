@@ -18,6 +18,7 @@ export class AuthService {
   private token: string;
   private authData: ITokenPayload;
   private authStatus = new BehaviorSubject<boolean>(false);
+  private logoutTimer: ReturnType<typeof setTimeout>;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -53,6 +54,7 @@ export class AuthService {
         this.authData = response.payload;
         this.authStatus.next(true);
         this.saveAuthData();
+        this.setLogoutTimer();
         this.router.navigate(['/']);
       }, () => {
         this.authStatus.next(false);
@@ -64,6 +66,7 @@ export class AuthService {
     this.authData = null;
     this.authStatus.next(false);
     this.clearAuthData();
+    clearTimeout(this.logoutTimer);
     this.router.navigate(['/auth/login']);
   }
 
@@ -82,6 +85,7 @@ export class AuthService {
       this.token = authData.token;
       this.authData = authData.payload;
       this.authStatus.next(true);
+      this.setLogoutTimer();
     }
   }
 
@@ -127,5 +131,15 @@ export class AuthService {
     localStorage.removeItem('email');
     localStorage.removeItem('_id');
     localStorage.removeItem('expires');
+  }
+
+  // Logout when the token expires
+  // TODO refresh tokens
+  private setLogoutTimer() {
+    const expiresIn = new Date(this.authData.expires).getTime() - Date.now();
+
+    this.logoutTimer = setTimeout(() => {
+      this.logout();
+    }, expiresIn);
   }
 }

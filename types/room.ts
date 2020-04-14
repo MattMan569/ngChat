@@ -9,6 +9,7 @@ export interface IRoom {
     socketId: string;
     userId: string;
   }>;
+  tags: string[];
 }
 
 export default IRoom;

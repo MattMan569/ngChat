@@ -26,6 +26,10 @@ export class AuthService {
     return this.authStatus.asObservable();
   }
 
+  getToken() {
+    return this.token;
+  }
+
   signup(username: string, email: string, password: string, avatar?: File) {
     const signupData: ISignupData = {
       username,

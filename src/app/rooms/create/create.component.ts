@@ -26,9 +26,9 @@ export class CreateComponent implements OnInit {
           ],
         },
       ),
-      isLocked: new FormControl(),
+      isLocked: new FormControl(false),
       password: new FormControl(),
-      isLimited: new FormControl(),
+      isLimited: new FormControl(false),
       capacity: new FormControl(),
       tags: new FormControl(),
     });
@@ -83,5 +83,9 @@ export class CreateComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
+
+    console.log(this.form.value);
+
+    this.roomService.createRoom(this.form.value);
   }
 }

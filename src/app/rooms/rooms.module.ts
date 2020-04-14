@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { RoomsRoutingModule } from './rooms-routing.module';
+import { AngularMaterialModule } from '../angular-material.module';
 import { RoomsComponent } from './rooms.component';
 
 
@@ -9,6 +10,7 @@ import { RoomsComponent } from './rooms.component';
   imports: [
     CommonModule,
     RoomsRoutingModule,
+    AngularMaterialModule,
   ],
   declarations: [RoomsComponent],
 })

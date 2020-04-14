@@ -8,6 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   exports: [
@@ -19,6 +21,8 @@ import { MatSliderModule } from '@angular/material/slider';
     MatInputModule,
     MatCheckboxModule,
     MatSliderModule,
+    MatProgressSpinnerModule,
+    MatExpansionModule,
   ],
 })
 export class AngularMaterialModule { }

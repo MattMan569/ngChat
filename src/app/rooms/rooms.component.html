@@ -1,1 +1,13 @@
-<p>rooms works!</p>
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+
+<mat-accordion *ngIf="rooms.length > 0 && !isLoading">
+  <mat-expansion-panel *ngFor="let room of rooms">
+    <mat-expansion-panel-header>
+      <mat-panel-title>{{room.name}}</mat-panel-title>
+    </mat-expansion-panel-header>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<p class="no-rooms" *ngIf="!isLoading && rooms.length <= 0">
+  There are no rooms. Would you like to <a routerLink="/rooms/create" routerLinkActive="router-link-active" >create one</a>?
+</p>

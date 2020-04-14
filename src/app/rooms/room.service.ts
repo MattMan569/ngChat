@@ -33,7 +33,6 @@ export class RoomService {
     this.http.get<IRoom[]>(SERVER_URL)
       .subscribe((rooms) => {
         this.rooms = rooms;
-        console.log(rooms);
         this.emitRooms();
       }, (error: HttpErrorResponse) => {
         console.error(error);

@@ -54,6 +54,10 @@ const roomSchema = new mongoose.Schema({
       type: Schema.Types.ObjectId,
     },
   }],
+  tags: [{
+    type: String,
+    required: true,
+  }],
 }, {
   timestamps: true,
 });

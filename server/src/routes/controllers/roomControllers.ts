@@ -9,6 +9,10 @@ export const createRoom = async (req: Request, res: Response) => {
     roomData.owner = req.session?._id as string;
     roomData.users = [];
 
+    if (!roomData.tags) {
+      roomData.tags = [];
+    }
+
     if (roomData.isLocked && !roomData.password) {
       return res.status(401).json('Locked rooms must have a password');
     }

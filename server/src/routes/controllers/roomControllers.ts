@@ -17,8 +17,6 @@ export const createRoom = async (req: Request, res: Response) => {
       return res.status(401).json('Rooms with limited capacity must specify a capacity');
     }
 
-    console.log(roomData);
-
     const room = await Room.create(req.body);
     res.status(201).json(room);
   } catch (error) {

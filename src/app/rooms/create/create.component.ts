@@ -19,12 +19,12 @@ export class CreateComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl(
         null, {
-          validators: [
-            Validators.required,
-            Validators.minLength(3),
-            Validators.maxLength(64),
-          ],
-        },
+        validators: [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(64),
+        ],
+      },
       ),
       isLocked: new FormControl(false),
       password: new FormControl(),
@@ -84,7 +84,12 @@ export class CreateComponent implements OnInit {
       return;
     }
 
-    console.log(this.form.value);
+    if (this.form.value.tags) {
+      // Split tags on spaces, ignore multiple spaces
+      this.form.value.tags = (this.form.value.tags as string).split(' ').filter(i => i);
+    } else {
+      this.form.value.tags = [];
+    }
 
     this.roomService.createRoom(this.form.value);
   }

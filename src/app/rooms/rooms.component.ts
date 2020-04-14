@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RoomService } from './room.service';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { RoomService } from './room.service';
 import IRoom from 'types/room';
 
 @Component({
@@ -12,6 +12,8 @@ import IRoom from 'types/room';
 export class RoomsComponent implements OnInit, OnDestroy {
   rooms: IRoom[] = [];
   isLoading = false;
+  search = '';
+  @ViewChild('inputEl') input: ElementRef;
   private roomsSub: Subscription;
 
   constructor(private roomService: RoomService) { }
@@ -20,9 +22,19 @@ export class RoomsComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.roomsSub = this.roomService.getRoomsUpdated().subscribe((rooms) => {
       this.rooms = rooms;
+      console.log(this.rooms);
       this.isLoading = false;
     });
     this.roomService.getRooms();
+  }
+
+  onSearch() {
+    this.search = (this.input.nativeElement as HTMLInputElement).value;
+  }
+
+  onClear() {
+    this.search = '';
+    (this.input.nativeElement as HTMLInputElement).value = '';
   }
 
   ngOnDestroy() {

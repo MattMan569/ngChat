@@ -22,7 +22,6 @@ export class RoomsComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.roomsSub = this.roomService.getRoomsUpdated().subscribe((rooms) => {
       this.rooms = rooms;
-      console.log(this.rooms);
       this.isLoading = false;
     });
     this.roomService.getRooms();

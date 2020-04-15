@@ -16,8 +16,21 @@
 <mat-accordion *ngIf="rooms.length > 0 && !isLoading">
   <mat-expansion-panel *ngFor="let room of rooms">
     <mat-expansion-panel-header>
-      <mat-panel-title>{{ room.name }}</mat-panel-title>
+      <mat-panel-title>
+        {{ room.name }}
+      </mat-panel-title>
+      <mat-panel-description>
+        <mat-icon *ngIf="room.isLocked">lock_outline</mat-icon>
+      </mat-panel-description>
     </mat-expansion-panel-header>
+    <!-- TODO desc -->
+    <!-- {{ room.description }} -->
+    hi
+    <mat-action-row>
+      <!-- TODO only if owner and auth -->
+      <a mat-flat-button color="accent" routerLink="">Configure</a>
+      <button mat-flat-button color="primary">Join</button>
+    </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
 

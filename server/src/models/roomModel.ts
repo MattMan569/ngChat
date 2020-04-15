@@ -19,6 +19,10 @@ const roomSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
+  description: {
+    type: String,
+    trim: true,
+  },
   isLocked: {
     type: Boolean,
     required: true,

@@ -1,5 +1,6 @@
 export interface IRoom {
   name: string;
+  description: string;
   isLocked: boolean;
   password: string;
   isLimited: boolean;

@@ -12,6 +12,13 @@
       </mat-error>
     </mat-form-field>
 
+    <mat-form-field>
+      <textarea matInput placeholder="Room Description" formControlName="description"></textarea>
+      <mat-error *ngIf="form.get('description').invalid">
+        Room description must be less than 1000 characters
+      </mat-error>
+    </mat-form-field>
+
     <mat-checkbox
       (change)="onLockChange()"
       formControlName="isLocked"

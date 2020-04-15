@@ -24,8 +24,13 @@ export class CreateComponent implements OnInit {
           Validators.minLength(3),
           Validators.maxLength(64),
         ],
-      },
-      ),
+      }),
+      description: new FormControl(
+        null, {
+        validators: [
+          Validators.maxLength(1000),
+        ],
+      }),
       isLocked: new FormControl(false),
       password: new FormControl(),
       isLimited: new FormControl(false),

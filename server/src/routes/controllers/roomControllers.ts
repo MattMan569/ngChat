@@ -34,17 +34,12 @@ export const updateRoom = async (req: Request, res: Response) => {
   try {
     const roomData: IRoom = req.body;
 
-    console.log(roomData);
-    console.log(req.session);
-
     const room = await Room.findOneAndUpdate({
       _id: roomData._id,
       owner: req.session?._id,
     }, roomData, {
       new: true,
     });
-
-    console.log(room);
 
     if (!room) {
       return res.status(401).json();

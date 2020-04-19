@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RoomService } from '../room.service';
+import { ActivatedRoute } from '@angular/router';
+import IRoom from 'types/room';
 
 @Component({
   selector: 'app-create',
@@ -9,13 +11,44 @@ import { RoomService } from '../room.service';
 })
 export class CreateComponent implements OnInit {
   form: FormGroup;
+  room: IRoom;
   isLocked = false;
   isLimited = false;
   isLoading = false;
+  private mode: 'create' | 'edit';
+  private id: string;
 
-  constructor(private roomService: RoomService) { }
+  constructor(private roomService: RoomService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    // The id param is present if a room is being edited
+    this.route.paramMap.subscribe((paramMap) => {
+      if (paramMap.has('id')) {
+        this.mode = 'edit';
+        this.id = paramMap.get('id');
+        this.isLoading = true;
+
+        // Get the room with the specified id
+        this.roomService.getRoom(this.id).subscribe((room) => {
+          this.isLoading = false;
+          this.room = room;
+
+          // Populate the form with the retrieved room's values
+          this.form.setValue({
+            name: this.room.name,
+            description: this.room.description,
+            isLocked: this.room.isLocked,
+            password: this.room.isLocked ? this.room.password : null,
+            isLimited: this.room.isLimited,
+            capacity: this.room.isLimited ? this.room.capacity : null,
+            tags: this.room.tags.join(' '), // TODO verify
+          });
+        });
+      } else {
+        this.mode = 'create';
+      }
+    });
+
     this.form = new FormGroup({
       name: new FormControl(
         null, {
@@ -75,6 +108,10 @@ export class CreateComponent implements OnInit {
     }
   }
 
+  getButtonText() {
+    return this.mode === 'create' ? 'Create' : 'Update';
+  }
+
   onCreateRoom() {
     // If the room is locked there must be a password
     if (this.form.controls.isLocked.value) {
@@ -90,12 +127,18 @@ export class CreateComponent implements OnInit {
     }
 
     if (this.form.value.tags) {
-      // Split tags on spaces, ignore multiple spaces
+      // Split tags on spaces, ignore multiple spaces via filter
       this.form.value.tags = (this.form.value.tags as string).split(' ').filter(i => i);
     } else {
       this.form.value.tags = [];
     }
 
-    this.roomService.createRoom(this.form.value);
+    this.isLoading = true;
+
+    if (this.mode === 'create') {
+      this.roomService.createRoom(this.form.value);
+    } else {
+      this.roomService.updateRoom({_id: this.room._id, ...this.form.value});
+    }
   }
 }

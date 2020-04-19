@@ -29,7 +29,7 @@
 
     <mat-action-row>
       <!-- TODO only if owner and auth -->
-      <a mat-flat-button color="accent" routerLink="">Configure</a>
+      <a mat-flat-button color="accent" [routerLink]="['edit', room._id]">Configure</a>
       <button mat-flat-button color="primary">Join</button>
     </mat-action-row>
   </mat-expansion-panel>

@@ -7,11 +7,11 @@ export const router = express.Router();
 
 router.post('/', isAuthorized, roomControllers.createRoom);
 
-router.patch('/:id', isAuthorized);
+router.patch('/:id', isAuthorized, roomControllers.updateRoom);
 
 router.get('/', roomControllers.getRooms);
 
-router.get('/:id');
+router.get('/:id', roomControllers.getRoom);
 
 router.delete('/:id', isAuthorized);
 

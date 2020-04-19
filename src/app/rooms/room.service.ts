@@ -25,7 +25,16 @@ export class RoomService {
       .subscribe(() => {
 
       }, (error) => {
+        console.error(error);
+      });
+  }
 
+  updateRoom(roomData: IRoom) {
+    this.http.patch<IRoom>(`${SERVER_URL}/${roomData._id}`, roomData)
+      .subscribe(() => {
+
+      }, (error) => {
+        console.error(error);
       });
   }
 

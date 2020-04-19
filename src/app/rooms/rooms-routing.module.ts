@@ -6,6 +6,7 @@ import { RoomsComponent } from './rooms.component';
 const routes: Routes = [
   { path: '', component: RoomsComponent },
   { path: 'create', loadChildren: () => import('./create/create.module').then(m => m.CreateModule) },
+  { path: 'edit/:id', loadChildren: () => import('./create/create.module').then(m => m.CreateModule) },
 ];
 
 @NgModule({

@@ -26,7 +26,34 @@ export const createRoom = async (req: Request, res: Response) => {
   } catch (error) {
     // TODO invalid req.session?
     console.error(error);
-    res.status(500).json();
+    res.status(500).json('Internal server error');
+  }
+};
+
+export const updateRoom = async (req: Request, res: Response) => {
+  try {
+    const roomData: IRoom = req.body;
+
+    console.log(roomData);
+    console.log(req.session);
+
+    const room = await Room.findOneAndUpdate({
+      _id: roomData._id,
+      owner: req.session?._id,
+    }, roomData, {
+      new: true,
+    });
+
+    console.log(room);
+
+    if (!room) {
+      return res.status(401).json();
+    }
+
+    res.json();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json('Internal server error');
   }
 };
 
@@ -39,7 +66,24 @@ export const getRooms = async (req: Request, res: Response) => {
   }
 };
 
+export const getRoom = async (req: Request, res: Response) => {
+  try {
+    const room = await Room.findById(req.params.id);
+
+    if (!room) {
+      return res.status(404).json();
+    }
+
+    res.json(room);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json();
+  }
+};
+
 export default {
   createRoom,
+  updateRoom,
   getRooms,
+  getRoom,
 };

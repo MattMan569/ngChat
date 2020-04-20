@@ -21,34 +21,7 @@ export class CreateComponent implements OnInit {
   constructor(private roomService: RoomService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // The id param is present if a room is being edited
-    this.route.paramMap.subscribe((paramMap) => {
-      if (paramMap.has('id')) {
-        this.mode = 'edit';
-        this.id = paramMap.get('id');
-        this.isLoading = true;
-
-        // Get the room with the specified id
-        this.roomService.getRoom(this.id).subscribe((room) => {
-          this.isLoading = false;
-          this.room = room;
-
-          // Populate the form with the retrieved room's values
-          this.form.setValue({
-            name: this.room.name,
-            description: this.room.description,
-            isLocked: this.room.isLocked,
-            password: this.room.isLocked ? this.room.password : null,
-            isLimited: this.room.isLimited,
-            capacity: this.room.isLimited ? this.room.capacity : null,
-            tags: this.room.tags.join(' '), // TODO verify
-          });
-        });
-      } else {
-        this.mode = 'create';
-      }
-    });
-
+    // Setup the reactive form
     this.form = new FormGroup({
       name: new FormControl(
         null, {
@@ -71,8 +44,42 @@ export class CreateComponent implements OnInit {
       tags: new FormControl(),
     });
 
-    this.form.controls.password.disable();
-    this.form.controls.capacity.disable();
+    // Set the form's current mode
+    this.route.paramMap.subscribe((paramMap) => {
+      // If the id parameter is present then the room is being edited
+      if (paramMap.has('id')) {
+        this.mode = 'edit';
+        this.id = paramMap.get('id');
+        this.isLoading = true;
+
+        // Get the room with the specified id
+        this.roomService.getRoom(this.id).subscribe((room) => {
+          this.isLoading = false;
+          this.room = room;
+          this.isLocked = this.room.isLocked;
+          this.isLimited = this.room.isLimited;
+
+          // Populate the form with the retrieved room's values
+          this.form.setValue({
+            name: this.room.name,
+            description: this.room.description,
+            isLocked: this.room.isLocked,
+            password: this.room.isLocked ? this.room.password : null,
+            isLimited: this.room.isLimited,
+            capacity: this.room.isLimited ? this.room.capacity : null,
+            tags: this.room.tags.join(' '), // TODO verify
+          });
+
+          // Lock the unused controls
+          if (!this.isLocked) { this.form.controls.password.disable(); }
+          if (!this.isLimited) { this.form.controls.capacity.disable(); }
+        });
+      } else {
+        this.mode = 'create';
+        this.form.controls.password.disable();
+        this.form.controls.capacity.disable();
+      }
+    });
   }
 
   // Toggle the disable on the password field

@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card *ngIf="!isLoading">
   <form autocomplete="off" [formGroup]="form" (submit)="onCreateRoom()">
     <mat-form-field>
       <input

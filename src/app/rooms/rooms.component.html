@@ -30,7 +30,7 @@
     <mat-action-row>
       <!-- TODO only if owner and auth -->
       <a mat-flat-button color="accent" [routerLink]="['edit', room._id]">Configure</a>
-      <button mat-flat-button color="primary">Join</button>
+      <a mat-flat-button color="primary" [routerLink]="['chat', room._id]">Join</a>
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>

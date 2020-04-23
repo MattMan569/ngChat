@@ -1,5 +1,8 @@
 import server from './app/server';
 import database from './db/mongoose';
+import socketIOConnect from './socketIO/io';
+
+socketIOConnect();
 
 database.connect().then((success) => {
   if (success) {

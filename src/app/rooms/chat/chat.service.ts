@@ -9,10 +9,13 @@ import { AuthService } from './../../auth/auth.service';
 export class ChatService {
   private socket: SocketIOClient.Socket;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService) { }
+
+  connect(roomId: string) {
     this.socket = connect(`${environment.apiUrl}/chat`, {
       query: {
         token: this.authService.getToken(),
+        roomId,
       },
     });
   }

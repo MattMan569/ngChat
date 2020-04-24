@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ChatService } from './chat.service';
 
 @Component({
@@ -7,9 +8,9 @@ import { ChatService } from './chat.service';
   styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.chatService.emit('test', 'testing');
+    this.chatService.connect(this.route.snapshot.params.id);
   }
 }

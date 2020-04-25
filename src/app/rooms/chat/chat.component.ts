@@ -8,6 +8,30 @@ import { ChatService } from './chat.service';
   styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
+  messages = [
+    'start',
+    '2',
+    '3',
+    '3gggggggggggggggggggggggggggggggggg gggggggggggggggggggggggggggggggggg3gggggggggggggggggggggggggggggggg gggggggggggggggggggggggggggggggggggg3ggggggggggggggggggggggggggg ggggggggggggggggggggggggggggggggggggggggg 3gggggggggggggggggggggggggggggggggg gggggggggggggggggggggggggggggggggg3gggggggggggggggggggggggggggggggg gggggggggggggggggggggggggggggggggggg3ggggggggggggggggggggggggggg ggggggggggggggggggggggggggggggggggggggggg',
+    '3',
+    '3',
+    '3',
+    '3',
+    '3',
+    '3',
+    '3',
+    '3',
+    '3',
+    '3',
+    '3',
+    '3',
+    '3',
+    '3',
+    '3',
+    '3',
+    'end',
+  ];
+
   constructor(private chatService: ChatService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {

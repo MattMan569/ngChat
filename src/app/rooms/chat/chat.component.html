@@ -12,23 +12,13 @@
     </mat-card>
   </div>
 
-  <div id="messages">
-    <mat-card>
+  <cdk-virtual-scroll-viewport [itemSize]="50" id="messages">
+    <mat-card *cdkVirtualFor="let message of messages">
       <mat-card-content>
-        Message 1
+        {{message}}
       </mat-card-content>
     </mat-card>
-    <mat-card>
-      <mat-card-content>
-        Message 2
-      </mat-card-content>
-    </mat-card>
-    <mat-card>
-      <mat-card-content>
-        Message 3
-      </mat-card-content>
-    </mat-card>
-  </div>
+  </cdk-virtual-scroll-viewport>
 
   <div id="compose">Compose</div>
 </div>

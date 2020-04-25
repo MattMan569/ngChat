@@ -4,12 +4,14 @@ import { CommonModule } from '@angular/common';
 import { ChatRoutingModule } from './chat-routing.module';
 import { ChatComponent } from './chat.component';
 import { AngularMaterialModule } from 'src/app/angular-material.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [ChatComponent],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     ChatRoutingModule,
     AngularMaterialModule,
   ],

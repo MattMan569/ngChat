@@ -1,24 +1,38 @@
 <div id="chat-container">
-  <div id="users">
-    <mat-card>
-      <mat-card-title>Users</mat-card-title>
-      <mat-card-content>
-        <mat-nav-list>
-          <a mat-list-item href="#">User 1</a>
-          <a mat-list-item href="#">User 2</a>
-          <a mat-list-item href="#">User 3</a>
-        </mat-nav-list>
-      </mat-card-content>
-    </mat-card>
-  </div>
+  <mat-card id="users">
+    <mat-card-title>Users</mat-card-title>
+    <mat-card-content>
+      <mat-nav-list>
+        <cdk-virtual-scroll-viewport [itemSize]="48">
+          <a mat-list-item href="#" *cdkVirtualFor="let user of users">
+            {{ user }}
+          </a>
+        </cdk-virtual-scroll-viewport>
+      </mat-nav-list>
+    </mat-card-content>
+  </mat-card>
 
   <cdk-virtual-scroll-viewport [itemSize]="50" id="messages">
     <mat-card *cdkVirtualFor="let message of messages">
       <mat-card-content>
-        {{message}}
+        {{ message }}
       </mat-card-content>
     </mat-card>
   </cdk-virtual-scroll-viewport>
 
-  <div id="compose">Compose</div>
+  <mat-card id="compose">
+    <form
+      autocomplete="off"
+      spellcheck="true"
+      [formGroup]="form"
+      (submit)="onSendMessage()"
+    >
+      <mat-form-field>
+        <input matInput type="text" placeholder="Message" />
+      </mat-form-field>
+      <button mat-icon-button color="accent" type="submit">
+        <mat-icon>send</mat-icon>
+      </button>
+    </form>
+  </mat-card>
 </div>

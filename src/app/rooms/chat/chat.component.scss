@@ -5,17 +5,48 @@
     "users compose";
   grid-template-rows: 1fr min-content;
   grid-template-columns: 10rem 1fr;
+  gap: 1rem;
   height: 100%;
 }
 
 #users {
   grid-area: users;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+
+  mat-card-content, mat-nav-list, cdk-virtual-scroll-viewport {
+    height: 100%;
+    box-sizing: border-box;
+  }
 }
 
 #messages {
   grid-area: messages;
+
+  mat-card {
+    margin-right: 0.5rem;
+
+    &:not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+
+    mat-card-content {
+      white-space: pre;
+    }
+  }
 }
 
 #compose {
   grid-area: compose;
+
+  form {
+    display: flex;
+    align-items: center;
+
+    mat-form-field {
+      flex: 1;
+    }
+  }
 }

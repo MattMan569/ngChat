@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ChatService } from './chat.service';
 
 @Component({
@@ -8,33 +9,29 @@ import { ChatService } from './chat.service';
   styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
-  messages = [
-    'start',
-    '2',
-    '3',
-    '3gggggggggggggggggggggggggggggggggg gggggggggggggggggggggggggggggggggg3gggggggggggggggggggggggggggggggg gggggggggggggggggggggggggggggggggggg3ggggggggggggggggggggggggggg ggggggggggggggggggggggggggggggggggggggggg 3gggggggggggggggggggggggggggggggggg gggggggggggggggggggggggggggggggggg3gggggggggggggggggggggggggggggggg gggggggggggggggggggggggggggggggggggg3ggggggggggggggggggggggggggg ggggggggggggggggggggggggggggggggggggggggg',
-    '3',
-    '3',
-    '3',
-    '3',
-    '3',
-    '3',
-    '3',
-    '3',
-    '3',
-    '3',
-    '3',
-    '3',
-    '3',
-    '3',
-    '3',
-    '3',
-    'end',
-  ];
+  form: FormGroup;
+
+  messages = Array.from(new Array(100), (v, i) => `Message ${i}\nHi\nHello`);
+  users = Array.from(new Array(100), (v, i) => `User ${i}`);
 
   constructor(private chatService: ChatService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.chatService.connect(this.route.snapshot.params.id);
+
+    this.form = new FormGroup({
+      message: new FormControl(
+        null, {
+          validators: [
+            Validators.required,
+            Validators.maxLength(1000),
+          ],
+        },
+      ),
+    });
+  }
+
+  onSendMessage() {
+
   }
 }

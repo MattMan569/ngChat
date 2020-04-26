@@ -4,7 +4,6 @@ import { Response, Request, NextFunction } from 'express';
 // present on the request from the session middleware
 export const isAuthorized = (req: Request, res: Response, next: NextFunction) => {
   if (!req.session) {
-    console.log(req.session);
     return res.status(401).json('You must be logged in to do that');
   }
 

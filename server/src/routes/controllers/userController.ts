@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import jwtUtil from '../util/jwt';
+import jwtUtil from '../../util/jwt';
 
 import User from './../../models/userModel';
 import ISignupData from 'types/signupData';

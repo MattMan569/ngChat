@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import jwtUtil from '../routes/util/jwt';
+import jwtUtil from '../util/jwt';
 
 // Parse the json web token, if present, and put its payload on req.session
 export const session = (req: Request, res: Response, next: NextFunction) => {

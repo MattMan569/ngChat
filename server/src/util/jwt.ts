@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import ITokenPayload from 'types/tokenPayload';
+import { IToken } from 'types/token';
 
 // Encode the user's information into the jwt and return it
 export const encodeAccessToken = (
@@ -19,7 +19,7 @@ export const encodeAccessToken = (
     username,
     email,
     _id: id,
-  } as ITokenPayload, process.env.JWT_SECRET, {
+  } as IToken, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
@@ -27,14 +27,14 @@ export const encodeAccessToken = (
 };
 
 // Decode the token and return the payload on success, or false on failure
-export const decodeAccessToken = (token: string): ITokenPayload | false => {
+export const decodeAccessToken = (token: string): IToken | false => {
   if (!process.env.JWT_SECRET) {
     throw new Error('Environment variable JWT_SECRET is undefined.');
   }
 
   try {
     // Will throw if token is invalid or secret is wrong
-    return jwt.verify(token, process.env.JWT_SECRET) as ITokenPayload;
+    return jwt.verify(token, process.env.JWT_SECRET) as IToken;
   } catch (error) {
     return false;
   }

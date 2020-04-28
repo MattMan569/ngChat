@@ -45,6 +45,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     (this.messageInput.nativeElement as HTMLInputElement).focus();
+
+    // Prevent ExpressionChangedAfterItHasBeenCheckedError
+    this.cdRef.detectChanges();
   }
 
   onSendMessage() {

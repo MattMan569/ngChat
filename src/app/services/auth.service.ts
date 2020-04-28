@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 
-import { environment } from './../../environments/environment';
+import { environment } from '../../environments/environment';
 import IUser from 'types/user';
 import ISignupData from 'types/signupData';
 import ITokenPayload from 'types/tokenPayload';

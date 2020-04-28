@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { RoomService } from '../room.service';
+import { RoomService } from '../../services/room.service';
 import { ActivatedRoute } from '@angular/router';
 import IRoom from 'types/room';
 

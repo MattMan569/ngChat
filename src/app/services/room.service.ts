@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Subject } from 'rxjs';
 
-import { environment } from './../../environments/environment';
+import { environment } from '../../environments/environment';
 import IRoom from 'types/room';
 
 const SERVER_URL = `${environment.apiUrl}/room`;

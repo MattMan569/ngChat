@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/co
 import { Subscription } from 'rxjs';
 
 import IRoom from 'types/room';
-import { RoomService } from './room.service';
-import { AuthService } from '../auth/auth.service';
+import { RoomService } from '../services/room.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-rooms',

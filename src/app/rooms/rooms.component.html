@@ -27,10 +27,18 @@
 
     {{ room.description }}
 
-    <mat-action-row>
+    <mat-action-row *ngIf="isAuthenticated">
       <!-- TODO only if owner and auth -->
-      <a mat-flat-button color="accent" [routerLink]="['edit', room._id]">Configure</a>
-      <a mat-flat-button color="primary" [routerLink]="['chat', room._id]">Join</a>
+      <a
+        mat-flat-button
+        color="accent"
+        [routerLink]="['edit', room._id]"
+        *ngIf="room.owner === userId"
+        >Configure</a
+      >
+      <a mat-flat-button color="primary" [routerLink]="['chat', room._id]"
+        >Join</a
+      >
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>

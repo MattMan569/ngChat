@@ -30,6 +30,10 @@ export class AuthService {
     return this.token;
   }
 
+  getUserId() {
+    return this.authData._id;
+  }
+
   signup(username: string, email: string, password: string, avatar?: File) {
     const signupData: ISignupData = {
       username,

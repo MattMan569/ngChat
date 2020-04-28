@@ -39,6 +39,10 @@
         >Join</a
       >
     </mat-action-row>
+
+    <mat-action-row *ngIf="!isAuthenticated">
+      <span id="action-login-msg">Please login to join rooms</span>
+    </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
 

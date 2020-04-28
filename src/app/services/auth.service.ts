@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   getUserId() {
-    return this.authData._id;
+    return this.authData?._id;
   }
 
   signup(username: string, email: string, password: string, avatar?: File) {

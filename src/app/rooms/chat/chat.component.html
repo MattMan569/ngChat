@@ -3,7 +3,7 @@
     <mat-card-title>Users</mat-card-title>
     <mat-card-content>
       <mat-nav-list>
-        <cdk-virtual-scroll-viewport [itemSize]="48">
+        <cdk-virtual-scroll-viewport [itemSize]="48" #uv>
           <a mat-list-item href="#" *cdkVirtualFor="let user of users">
             {{ user }}
           </a>
@@ -12,7 +12,7 @@
     </mat-card-content>
   </mat-card>
 
-  <cdk-virtual-scroll-viewport [itemSize]="50" id="messages">
+  <cdk-virtual-scroll-viewport [itemSize]="50" id="messages" #messageViewport>
     <mat-card *cdkVirtualFor="let message of messages">
       <mat-card-content>
         {{ message }}
@@ -28,7 +28,13 @@
       (submit)="onSendMessage()"
     >
       <mat-form-field>
-        <input matInput type="text" placeholder="Message" />
+        <input
+          matInput
+          type="text"
+          placeholder="Message"
+          formControlName="message"
+          #messageInput
+        />
       </mat-form-field>
       <button mat-icon-button color="accent" type="submit">
         <mat-icon>send</mat-icon>

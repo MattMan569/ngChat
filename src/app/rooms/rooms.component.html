@@ -25,7 +25,7 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
 
-    {{ room.description }}
+    {{ room.description ? room.description : 'No description provided' }}
 
     <mat-action-row *ngIf="isAuthenticated">
       <a

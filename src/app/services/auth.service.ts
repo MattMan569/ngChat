@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 
@@ -56,17 +56,25 @@ export class AuthService {
       password,
     };
 
-    this.http.post<ILoginResponse>(`${SERVER_URL}/login`, loginData)
-      .subscribe((response) => {
-        this.token = response.token;
-        this.authData = response.payload;
-        this.authStatus.next(true);
-        this.saveAuthData();
-        this.setLogoutTimer();
-        this.router.navigate(['/']);
-      }, () => {
-        this.authStatus.next(false);
-      });
+    // Attempt to login
+    // On success, set auth info and redirect to room listing
+    // On failure, resolve the promise with the error message
+    return new Promise<string>((resolve, reject) => {
+      this.http.post<ILoginResponse>(`${SERVER_URL}/login`, loginData)
+        .subscribe((response) => {
+          resolve();
+          this.token = response.token;
+          this.authData = response.payload;
+          this.authStatus.next(true);
+          this.saveAuthData();
+          this.setLogoutTimer();
+          this.router.navigate(['/']);
+        }, (error: HttpErrorResponse) => {
+          resolve(error.error);
+          console.error(error);
+          this.authStatus.next(false);
+        });
+    });
   }
 
   logout() {

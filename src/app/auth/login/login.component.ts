@@ -12,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent implements OnInit, OnDestroy {
   form: FormGroup;
   isLoading = false;
+  errorMessage: string;
   private authSub: Subscription;
 
   constructor(private authService: AuthService) { }
@@ -37,17 +38,19 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  onLogin() {
+  async onLogin() {
     if (this.form.invalid) {
       return;
     }
 
     this.isLoading = true;
 
-    this.authService.login(
+    this.errorMessage = await this.authService.login(
       this.form.value.username,
       this.form.value.password,
     );
+
+    this.isLoading = false;
   }
 
   ngOnDestroy() {

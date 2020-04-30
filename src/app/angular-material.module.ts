@@ -11,6 +11,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
@@ -26,6 +27,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatProgressSpinnerModule,
     MatExpansionModule,
     MatIconModule,
+    MatDialogModule,
     ScrollingModule,
   ],
 })

@@ -7,7 +7,7 @@ import { environment } from './../environments/environment';
 import { AngularMaterialModule } from './angular-material.module';
 import { AppRoutingModule } from './app-routing.module';
 
-import { AuthInterceptor } from './auth/auth.interceptor';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';

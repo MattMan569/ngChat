@@ -2,6 +2,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 
+// Set the request's Authorization header with the user's token
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) { }

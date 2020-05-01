@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { ErrorComponent } from './../error/error.component';
+import { DialogComponent } from './../dialog/dialog.component';
 
 // Set the request's Authorization header with the user's token
 @Injectable()

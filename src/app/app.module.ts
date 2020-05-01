@@ -12,14 +12,14 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { ErrorComponent } from './error/error.component';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    ErrorComponent,
+    DialogComponent,
   ],
   imports: [
     BrowserModule,

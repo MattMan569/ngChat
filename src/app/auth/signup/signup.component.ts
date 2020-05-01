@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { AuthService } from '../../services/auth.service';
@@ -8,11 +8,13 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, AfterViewInit {
   form: FormGroup;
   isLoading = false;
+  spinnerDiameter: number;
+  @ViewChild('spinnerDiv') spinnerDiv: ElementRef;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -45,6 +47,11 @@ export class SignupComponent implements OnInit {
         ],
       }),
     });
+  }
+
+  ngAfterViewInit() {
+    this.spinnerDiameter = (this.spinnerDiv.nativeElement as HTMLDivElement).offsetHeight;
+    this.cdRef.detectChanges();
   }
 
   onSignup() {

@@ -12,12 +12,7 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input
-      matInput
-      type="email"
-      placeholder="Email"
-      formControlName="email"
-    />
+    <input matInput type="email" placeholder="Email" formControlName="email" />
     <mat-error *ngIf="form.get('email').invalid">
       Please enter a valid email
     </mat-error>
@@ -47,5 +42,8 @@
     </mat-error>
   </mat-form-field>
 
-  <button mat-raised-button color="primary" type="submit">Signup</button>
+  <div id="spinner-div" #spinnerDiv>
+    <button mat-raised-button color="primary" type="submit">Signup</button>
+    <mat-spinner [diameter]="spinnerDiameter" *ngIf="isLoading"></mat-spinner>
+  </div>
 </form>

@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 
 import { environment } from '../../environments/environment';
+import { DialogComponent } from '../dialog/dialog.component';
 import IRoom from 'types/room';
 
 const SERVER_URL = `${environment.apiUrl}/room`;
@@ -14,7 +17,7 @@ export class RoomService {
   private rooms: IRoom[] = [];
   private roomsUpdated = new Subject<IRoom[]>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router, private dialog: MatDialog) { }
 
   getRoomsUpdated() {
     return this.roomsUpdated.asObservable();
@@ -23,8 +26,21 @@ export class RoomService {
   createRoom(roomData: IRoom) {
     this.http.post<IRoom>(SERVER_URL, roomData)
       .subscribe(() => {
+        // Notify user of success via dialog
+        const dialogRef = this.dialog.open(DialogComponent, {
+          data: 'Room successfully created',
+          hasBackdrop: false,
+          position: { top: '2rem' },
+        });
 
+        this.router.navigate(['/rooms']);
+
+        // Close the dialog after 2 seconds
+        setTimeout(() => {
+          dialogRef.close();
+        }, 2000);
       }, (error) => {
+        // TODO room create error
         console.error(error);
       });
   }

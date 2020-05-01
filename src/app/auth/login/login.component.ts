@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -9,13 +9,15 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   form: FormGroup;
   isLoading = false;
   errorMessage: string;
+  spinnerDiameter = 0;
+  @ViewChild('spinnerDiv') spinnerDiv: ElementRef;
   private authSub: Subscription;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.authSub = this.authService.getAuthStatus().subscribe(() => {
@@ -36,6 +38,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         ],
       }),
     });
+  }
+
+  ngAfterViewInit() {
+    this.spinnerDiameter = (this.spinnerDiv.nativeElement as HTMLDivElement).offsetHeight;
+    this.cdRef.detectChanges();
   }
 
   async onLogin() {

@@ -23,7 +23,10 @@
     </mat-error>
   </mat-form-field>
 
-  <button mat-raised-button color="primary" type="submit">Login</button>
+  <div id="spinner-div" #spinnerDiv>
+    <button mat-raised-button color="primary" type="submit">Login</button>
+    <mat-spinner [diameter]="spinnerDiameter" *ngIf="isLoading"></mat-spinner>
+  </div>
 </form>
 
 <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>

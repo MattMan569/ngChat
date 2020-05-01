@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   form: FormGroup;
   isLoading = false;
   errorMessage: string;
-  spinnerDiameter = 0;
+  spinnerDiameter: number;
   @ViewChild('spinnerDiv') spinnerDiv: ElementRef;
   private authSub: Subscription;
 

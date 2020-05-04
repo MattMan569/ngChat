@@ -34,11 +34,28 @@ export class RoomsComponent implements OnInit, OnDestroy {
     this.roomService.getRooms();
   }
 
-  onSearch() {
+  async onSearch() {
     this.search = (this.input.nativeElement as HTMLInputElement).value;
+
+    // TODO search mode based on if search el has focus
+
+    // Empty search by user deletion
+    // Repopulate rooms by default get-all
+    if (!this.search) {
+      // FIXME re-renders search bar, removing focus
+      // probably a problem with the ngIf condition
+      this.isLoading = true;
+      return this.roomService.getRooms();
+    }
+
+    this.isLoading = true;
+    this.rooms = await this.roomService.search(this.search);
+    this.isLoading = false;
   }
 
   onClear() {
+    this.isLoading = true;
+    this.roomService.getRooms();
     this.search = '';
     (this.input.nativeElement as HTMLInputElement).value = '';
   }

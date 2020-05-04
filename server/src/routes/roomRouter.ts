@@ -9,6 +9,8 @@ router.post('/', isAuthorized, roomControllers.createRoom);
 
 router.patch('/:id', isAuthorized, roomControllers.updateRoom);
 
+router.get('/search', roomControllers.search);
+
 router.get('/', roomControllers.getRooms);
 
 router.get('/:id', roomControllers.getRoom);

@@ -68,6 +68,23 @@ export class RoomService {
     return this.http.get<IRoom>(`${SERVER_URL}/${id}`);
   }
 
+  search(query: string) {
+    if (!query) {
+      return;
+    }
+
+    return new Promise<IRoom[]>((resolve, reject) => {
+      this.http.get<IRoom[]>(`${SERVER_URL}/search`, { params: { query } })
+        .subscribe((result) => {
+          resolve(result);
+          console.log(result);
+        }, (error) => {
+          reject();
+          console.error(error);
+        });
+    });
+  }
+
   private emitRooms = () => {
     this.roomsUpdated.next([...this.rooms]);
   }

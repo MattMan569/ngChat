@@ -76,9 +76,42 @@ export const getRoom = async (req: Request, res: Response) => {
   }
 };
 
+export const search = async (req: Request, res: Response) => {
+  try {
+    if (!req.query.query) {
+      return res.status(400).json('No query string provided');
+    }
+
+    // Search against room name and tags
+    const result = await Room.find().or([
+      {
+        name: {
+          $regex: req.query.query as string,
+          $options: 'i',
+        },
+      }, {
+        tags: {
+          $regex: req.query.query as string,
+          $options: 'i',
+        },
+      },
+    ]);
+
+    if (!result) {
+      return res.status(204).json();
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json();
+  }
+};
+
 export default {
   createRoom,
   updateRoom,
   getRooms,
   getRoom,
+  search,
 };

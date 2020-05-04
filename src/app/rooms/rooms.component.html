@@ -1,19 +1,22 @@
-<mat-spinner *ngIf="isLoading"></mat-spinner>
-
-<mat-form-field *ngIf="!isLoading && rooms.length > 0">
+<mat-form-field *ngIf="rooms.length > 0 || search">
   <input
-    matInput
-    type="search"
-    placeholder="Search Rooms"
-    (keyup)="onSearch()"
-    #inputEl
+  matInput
+  type="search"
+  placeholder="Search Rooms"
+  autocomplete="off"
+  (keyup)="onSearch()"
+  #inputEl
   />
   <button mat-icon-button matSuffix *ngIf="search" (click)="onClear()">
     <mat-icon>close</mat-icon>
   </button>
 </mat-form-field>
 
-<mat-accordion *ngIf="rooms.length > 0 && !isLoading">
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+
+<!-- TODO list room owner -->
+
+<mat-accordion *ngIf="search || rooms.length > 0 && !isLoading">
   <mat-expansion-panel *ngFor="let room of rooms">
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -46,7 +49,8 @@
   </mat-expansion-panel>
 </mat-accordion>
 
-<p class="no-rooms" *ngIf="!isLoading && rooms.length <= 0">
+<!-- TODO check if this still works when there are no rooms -->
+<p class="no-rooms" *ngIf="!isLoading && !search && rooms.length <= 0">
   There are no rooms. Would you like to
   <a routerLink="/rooms/create" routerLinkActive="router-link-active">
     create one</a

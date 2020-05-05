@@ -15,7 +15,7 @@ export class CreateComponent implements OnInit {
   isLocked = false;
   isLimited = false;
   isLoading = false;
-  private mode: 'create' | 'edit';
+  mode: 'create' | 'edit';
   private id: string;
 
   constructor(private roomService: RoomService, private route: ActivatedRoute) { }
@@ -113,10 +113,6 @@ export class CreateComponent implements OnInit {
       this.form.controls.capacity.enable();
       this.isLimited = true;
     }
-  }
-
-  getButtonText() {
-    return this.mode === 'create' ? 'Create' : 'Update';
   }
 
   onCreateRoom() {

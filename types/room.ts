@@ -1,5 +1,7 @@
+import IUser from './user';
+
 export interface IRoom {
-  _id: string;
+  _id: string | any;
   name: string;
   description: string;
   isLocked: boolean;
@@ -9,7 +11,7 @@ export interface IRoom {
   owner: string;
   users: Array<{
     socketId: string;
-    userId: string;
+    user: string | IUser;
   }>;
   tags: string[];
 }

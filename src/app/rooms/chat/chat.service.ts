@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { connect } from 'socket.io-client';
 import { environment } from './../../../environments/environment';
 import { AuthService } from '../../services/auth.service';
+import IUser from 'types/user';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,8 @@ export class ChatService {
   private socket: SocketIOClient.Socket;
   private messages: string[] = [];
   private messagesOb = new Subject<string[]>();
+  private users: Array<{ socketId: string, user: IUser}>;
+  private usersOb = new Subject<Array<{ socketId: string, user: IUser}>>();
 
   constructor(private authService: AuthService) { }
 
@@ -25,7 +28,10 @@ export class ChatService {
 
     this.eventHandler();
     this.socket.emit('join');
-    return this.messagesOb.asObservable();
+    return {
+      messagesOb: this.messagesOb.asObservable(),
+      usersOb: this.usersOb.asObservable(),
+    };
   }
 
   sendMessage(message: string) {
@@ -41,6 +47,11 @@ export class ChatService {
     this.socket.on('message', (message: string) => {
       this.messages.push(message);
       this.messagesOb.next([...this.messages]);
+    });
+
+    this.socket.on('userListUpdate', (users: Array<{ socketId: string, user: IUser }>) => {
+      this.users = users;
+      this.usersOb.next([...this.users]);
     });
 
     this.socket.on('error', (error: any) => {

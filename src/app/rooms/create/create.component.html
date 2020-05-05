@@ -68,6 +68,9 @@
       </mat-hint>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">{{ mode | titlecase }}</button>
+    <div id="buttons">
+      <button mat-raised-button color="primary" type="submit">{{ mode === 'edit' ? 'Save' : 'Create' }}</button>
+      <button mat-raised-button color="warn" type="button" (click)="onDelete()" *ngIf="mode === 'edit'">Delete</button>
+    </div>
   </form>
 </mat-card>

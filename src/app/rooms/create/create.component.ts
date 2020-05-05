@@ -144,4 +144,8 @@ export class CreateComponent implements OnInit {
       this.roomService.updateRoom({_id: this.room._id, ...this.form.value});
     }
   }
+
+  onDelete() {
+    this.roomService.deleteRoom(this.id);
+  }
 }

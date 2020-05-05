@@ -48,7 +48,18 @@ export class RoomService {
   updateRoom(roomData: IRoom) {
     this.http.patch<IRoom>(`${SERVER_URL}/${roomData._id}`, roomData)
       .subscribe(() => {
+        // TODO modal
+      }, (error) => {
+        console.error(error);
+      });
+  }
 
+  deleteRoom(roomId: string) {
+    this.http.delete<IRoom>(`${SERVER_URL}/${roomId}`)
+      .subscribe((room) => {
+        // TODO modal
+        // Create private function, pass in message as param
+        console.log(room);
       }, (error) => {
         console.error(error);
       });

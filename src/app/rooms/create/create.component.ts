@@ -115,7 +115,7 @@ export class CreateComponent implements OnInit {
     }
   }
 
-  onCreateRoom() {
+  onRoomSubmit() {
     // If the room is locked there must be a password
     if (this.form.controls.isLocked.value) {
       if (!this.form.controls.password.value) {

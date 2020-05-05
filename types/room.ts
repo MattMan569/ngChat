@@ -11,7 +11,7 @@ export interface IRoom {
   owner: string;
   users: Array<{
     socketId: string;
-    user: string | IUser;
+    user: string | IUser; // string for _id, IUser when populated
   }>;
   tags: string[];
 }

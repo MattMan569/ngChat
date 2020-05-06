@@ -89,10 +89,11 @@ export class RoomService {
     this.roomsUpdated.next([...this.rooms]);
   }
 
-  private openDialog = (message: string, durationMs: number = 2000) => {
+  private openDialog = (message: string, durationMs: number = 3000) => {
     const dialogRef = this.dialog.open(DialogComponent, {
       data: message,
       hasBackdrop: false,
+      panelClass: 'custom-dialog',
       position: { top: '2rem' },
     });
 

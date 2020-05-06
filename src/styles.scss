@@ -1,4 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import '_variables';
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.custom-dialog .mat-dialog-container {
+  height: min-content;
+  padding-top: 0;
+  padding-bottom: 0;
+  color: white;
+  background-color: $accent;
+}

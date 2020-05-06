@@ -146,6 +146,7 @@ export class CreateComponent implements OnInit {
   }
 
   onDelete() {
+    // TODO confirmation dialog
     this.roomService.deleteRoom(this.id);
   }
 }

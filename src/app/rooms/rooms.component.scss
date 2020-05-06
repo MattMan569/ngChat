@@ -35,3 +35,11 @@ mat-spinner {
 #action-login-msg {
   margin-right: 0.5rem;
 }
+
+.underline {
+  text-decoration: underline;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

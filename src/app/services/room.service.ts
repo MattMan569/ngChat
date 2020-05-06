@@ -48,6 +48,7 @@ export class RoomService {
   updateRoom(roomData: IRoom) {
     this.http.patch<IRoom>(`${SERVER_URL}/${roomData._id}`, roomData)
       .subscribe(() => {
+        this.router.navigate(['/rooms']);
         // TODO modal
       }, (error) => {
         console.error(error);

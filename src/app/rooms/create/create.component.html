@@ -13,7 +13,11 @@
     </mat-form-field>
 
     <mat-form-field>
-      <textarea matInput placeholder="Room Description" formControlName="description"></textarea>
+      <textarea
+        matInput
+        placeholder="Room Description"
+        formControlName="description"
+      ></textarea>
       <mat-error *ngIf="form.get('description').invalid">
         Room description must be less than 1000 characters
       </mat-error>
@@ -69,8 +73,18 @@
     </mat-form-field>
 
     <div id="buttons">
-      <button mat-raised-button color="primary" type="submit">{{ mode === 'edit' ? 'Save' : 'Create' }}</button>
-      <button mat-raised-button color="warn" type="button" (click)="onDelete()" *ngIf="mode === 'edit'">Delete</button>
+      <button mat-raised-button color="primary" type="submit">
+        {{ mode === "edit" ? "Save" : "Create" }}
+      </button>
+      <button
+        mat-raised-button
+        color="warn"
+        type="button"
+        (click)="onDelete()"
+        *ngIf="mode === 'edit'"
+      >
+        Delete
+      </button>
     </div>
   </form>
 </mat-card>

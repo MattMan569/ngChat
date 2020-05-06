@@ -26,19 +26,8 @@ export class RoomService {
   createRoom(roomData: IRoom) {
     this.http.post<IRoom>(SERVER_URL, roomData)
       .subscribe(() => {
-        // Notify user of success via dialog
-        const dialogRef = this.dialog.open(DialogComponent, {
-          data: 'Room successfully created',
-          hasBackdrop: false,
-          position: { top: '2rem' },
-        });
-
+        this.openDialog('Room successfully created');
         this.router.navigate(['/rooms']);
-
-        // Close the dialog after 2 seconds
-        setTimeout(() => {
-          dialogRef.close();
-        }, 2000);
       }, (error) => {
         // TODO room create error
         console.error(error);
@@ -48,8 +37,8 @@ export class RoomService {
   updateRoom(roomData: IRoom) {
     this.http.patch<IRoom>(`${SERVER_URL}/${roomData._id}`, roomData)
       .subscribe(() => {
+        this.openDialog('Room successfully updated');
         this.router.navigate(['/rooms']);
-        // TODO modal
       }, (error) => {
         console.error(error);
       });
@@ -58,9 +47,8 @@ export class RoomService {
   deleteRoom(roomId: string) {
     this.http.delete<IRoom>(`${SERVER_URL}/${roomId}`)
       .subscribe((room) => {
-        // TODO modal
-        // Create private function, pass in message as param
-        console.log(room);
+        this.openDialog(`Room '${room.name}' successfully deleted`);
+        this.router.navigate(['/rooms']);
       }, (error) => {
         console.error(error);
       });
@@ -99,5 +87,17 @@ export class RoomService {
 
   private emitRooms = () => {
     this.roomsUpdated.next([...this.rooms]);
+  }
+
+  private openDialog = (message: string, durationMs: number = 2000) => {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: message,
+      hasBackdrop: false,
+      position: { top: '2rem' },
+    });
+
+    setTimeout(() => {
+      dialogRef.close();
+    }, durationMs);
   }
 }

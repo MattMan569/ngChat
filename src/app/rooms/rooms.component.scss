@@ -6,30 +6,36 @@
   }
 }
 
+mat-spinner {
+  margin: auto;
+  margin-top: 10%;
+}
+
 mat-accordion {
-  mat-icon {
-    margin-right: 16px;
-    font-size: 16px;
-    width: 16px;
-    height: 16px;
+  mat-panel-title {
+    flex-basis: auto;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  mat-panel-description {
+    justify-content: flex-end;
+
+    span {
+      width: 4rem;
+      text-align: right;
+    }
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
   }
 
   a {
     margin-left: .5rem;
   }
-}
-
-mat-panel-title {
-  flex-basis: 0;
-}
-
-mat-panel-description {
-  flex-grow: 3;
-}
-
-mat-spinner {
-  margin: auto;
-  margin-top: 10%;
 }
 
 #action-login-msg {

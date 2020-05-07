@@ -1,11 +1,11 @@
 <mat-form-field *ngIf="rooms.length > 0 || search">
   <input
-  matInput
-  type="search"
-  placeholder="Search Rooms"
-  autocomplete="off"
-  (keyup)="onSearch()"
-  #inputEl
+    matInput
+    type="search"
+    placeholder="Search Rooms"
+    autocomplete="off"
+    (keyup)="onSearch()"
+    #inputEl
   />
   <button mat-icon-button matSuffix *ngIf="search" (click)="onClear()">
     <mat-icon>close</mat-icon>
@@ -14,21 +14,36 @@
 
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 
-<!-- TODO list room owner -->
-
-<mat-accordion *ngIf="search || rooms.length > 0 && !isLoading">
-  <mat-expansion-panel *ngFor="let room of rooms">
+<mat-accordion *ngIf="search || (rooms.length > 0 && !isLoading)">
+  <mat-expansion-panel *ngFor="let room of rooms" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
         {{ room.name }}
       </mat-panel-title>
 
       <mat-panel-description>
-        <mat-icon *ngIf="room.isLocked">lock_outline</mat-icon>
+        <mat-icon title="This room requires a password" *ngIf="room.isLocked"
+          >lock_outline</mat-icon
+        >
+        <span
+          title="Number of users currently in this room, out of its maximum capacity"
+          *ngIf="room.isLimited"
+          >{{ room.users.length }}/{{ room.capacity }}</span
+        >
+        <span
+          title="Number of users currently in this room"
+          *ngIf="!room.isLimited"
+          >{{ room.users.length }}</span
+        >
       </mat-panel-description>
     </mat-expansion-panel-header>
 
-    {{ room.description ? room.description : 'No description provided' }}
+    <!-- TODO populate owner -->
+    <p>Owner: {{ room.owner }}</p>
+    <p>
+      Description:
+      {{ room.description ? room.description : "No description provided" }}
+    </p>
 
     <mat-action-row *ngIf="isAuthenticated">
       <a
@@ -44,7 +59,10 @@
     </mat-action-row>
 
     <mat-action-row *ngIf="!isAuthenticated">
-      <span id="action-login-msg">Please <span class="underline" routerLink="/auth/login">login</span> to join rooms</span>
+      <span id="action-login-msg"
+        >Please <span class="underline" routerLink="/auth/login">login</span> to
+        join rooms</span
+      >
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>

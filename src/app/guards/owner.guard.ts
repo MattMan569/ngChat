@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { RoomService } from '../services/room.service';
 import IRoom from 'types/room';
+import IUser from 'types/user';
 
 @Injectable()
 export class OwnerGuard implements CanActivate {
@@ -17,7 +18,7 @@ export class OwnerGuard implements CanActivate {
 
     const allowed = new Promise<boolean>(async (resolve, reject) => {
       const room = await (this.roomService.getRoom(roomId).pipe(first()).toPromise() as Promise<IRoom>);
-      if (room.owner === userId) {
+      if ((room.owner as IUser)._id === userId) {
         resolve(true);
       } else {
         this.router.navigate(['/rooms']);

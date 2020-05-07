@@ -49,7 +49,7 @@
         mat-flat-button
         color="accent"
         [routerLink]="['edit', room._id]"
-        *ngIf="room.owner === userId"
+        *ngIf="asIUser(room.owner)._id === userId"
         >Configure</a
       >
       <a mat-flat-button color="primary" [routerLink]="['chat', room._id]"

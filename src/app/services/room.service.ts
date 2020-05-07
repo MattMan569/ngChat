@@ -77,7 +77,6 @@ export class RoomService {
       this.http.get<IRoom[]>(`${SERVER_URL}/search`, { params: { query } })
         .subscribe((result) => {
           resolve(result);
-          console.log(result);
         }, (error) => {
           reject();
           console.error(error);

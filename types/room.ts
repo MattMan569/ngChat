@@ -8,10 +8,10 @@ export interface IRoom {
   password: string;
   isLimited: boolean;
   capacity: number;
-  owner: string;
+  owner: string | IUser;
   users: Array<{
     socketId: string;
-    user: string | IUser; // string for _id, IUser when populated
+    user: string | IUser;
   }>;
   tags: string[];
 }

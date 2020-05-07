@@ -1,4 +1,4 @@
-import mongoose, { Document, Model, Schema } from 'mongoose';
+import mongoose, { Document, Model, Schema, HookNextFunction } from 'mongoose';
 import mongooseUniqueValidator from 'mongoose-unique-validator';
 
 import User from './userModel';
@@ -103,6 +103,14 @@ roomSchema.statics.removeUserFromRoom = async (roomId: string, userId: string) =
 };
 
 roomSchema.plugin(mongooseUniqueValidator);
+
+// Always populate the owner and room's users fields
+const autoPopulate = function(this: IRoomDocument, next: HookNextFunction) {
+  this.populate('owner').populate('users.user');
+  next();
+};
+roomSchema.pre('find', autoPopulate);
+roomSchema.pre('findOne', autoPopulate);
 
 export const Room = mongoose.model<IRoomDocument, IRoomModel>('Room', roomSchema);
 

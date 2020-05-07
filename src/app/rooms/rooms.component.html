@@ -38,8 +38,7 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
 
-    <!-- TODO populate owner -->
-    <p>Owner: {{ room.owner }}</p>
+    <p>Owner: {{ asIUser(room.owner).username }}</p>
     <p>
       Description:
       {{ room.description ? room.description : "No description provided" }}

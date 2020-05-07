@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import IRoom from 'types/room';
 import { RoomService } from '../services/room.service';
 import { AuthService } from '../services/auth.service';
+import IUser from 'types/user';
 
 @Component({
   selector: 'app-rooms',
@@ -58,6 +59,10 @@ export class RoomsComponent implements OnInit, OnDestroy {
     this.roomService.getRooms();
     this.search = '';
     (this.input.nativeElement as HTMLInputElement).value = '';
+  }
+
+  asIUser(obj: any) {
+    return obj as IUser;
   }
 
   ngOnDestroy() {

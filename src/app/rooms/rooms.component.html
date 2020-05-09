@@ -52,9 +52,17 @@
         *ngIf="asIUser(room.owner)._id === userId"
         >Configure</a
       >
-      <a mat-flat-button color="primary" [routerLink]="['chat', room._id]"
+      <!-- <a mat-flat-button color="primary" [routerLink]="['chat', room._id]" (click)="onJoin($event)"
         >Join</a
+      > -->
+      <button
+        mat-flat-button
+        color="primary"
+        id="{{ room._id }}"
+        (click)="onJoin($event)"
       >
+        Join
+      </button>
     </mat-action-row>
 
     <mat-action-row *ngIf="!isAuthenticated">

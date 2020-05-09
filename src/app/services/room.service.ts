@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { DialogComponent } from '../dialog/dialog.component';
+import { InfoComponent } from '../dialogs/info/info.component';
 import IRoom from 'types/room';
 
 const SERVER_URL = `${environment.apiUrl}/room`;
@@ -68,6 +68,10 @@ export class RoomService {
     return this.http.get<IRoom>(`${SERVER_URL}/${id}`);
   }
 
+  joinRoom(roomId: string, password: string) {
+    return this.http.post<boolean>(`${SERVER_URL}/join/${roomId}`, { password });
+  }
+
   search(query: string) {
     if (!query) {
       return;
@@ -89,7 +93,7 @@ export class RoomService {
   }
 
   private openDialog = (message: string, durationMs: number = 3000) => {
-    const dialogRef = this.dialog.open(DialogComponent, {
+    const dialogRef = this.dialog.open(InfoComponent, {
       data: message,
       hasBackdrop: false,
       panelClass: 'custom-dialog',

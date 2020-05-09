@@ -1,10 +1,13 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 
 import IRoom from 'types/room';
 import { RoomService } from '../services/room.service';
 import { AuthService } from '../services/auth.service';
 import IUser from 'types/user';
+import { PasswordComponent } from '../dialogs/password/password.component';
 
 @Component({
   selector: 'app-rooms',
@@ -20,9 +23,15 @@ export class RoomsComponent implements OnInit, OnDestroy {
   @ViewChild('inputEl') input: ElementRef;
   private roomsSub: Subscription;
 
-  constructor(private authService: AuthService, private roomService: RoomService) { }
+  constructor(
+    private authService: AuthService,
+    private roomService: RoomService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private passwordDialog: MatDialog,
+  ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.isLoading = true;
     this.userId = this.authService.getUserId();
     this.authService.getAuthStatus().subscribe((authStatus) => {
@@ -33,6 +42,10 @@ export class RoomsComponent implements OnInit, OnDestroy {
       this.isLoading = false;
     });
     this.roomService.getRooms();
+
+    // TODO remove
+    const userId = this.authService.getUserId();
+    this.roomService.joinRoom('5eb36bcf37a93744143d51ba', 'pass');
   }
 
   async onSearch() {
@@ -52,6 +65,30 @@ export class RoomsComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.rooms = await this.roomService.search(this.search);
     this.isLoading = false;
+  }
+
+  onJoin(event: Event) {
+    const roomId = (event.target as HTMLElement).closest('button').id;
+    const room = this.rooms.find(r => r._id === roomId);
+
+    // If the room is locked, open a dialog to get the room's password from the user
+    // Otherwise, just navigate into the room
+    if (room.isLocked) {
+      const dialogRef = this.passwordDialog.open(PasswordComponent, {
+        data: roomId,
+        position: { top: '25%' },
+      });
+
+      // If the correct password has been entered, navigate into the room
+      // Failure case is handled via an error message in the dialog itself
+      dialogRef.afterClosed().subscribe((success) => {
+        if (success) {
+          this.router.navigate(['chat', roomId], { relativeTo: this.route });
+        }
+      });
+    } else {
+      this.router.navigate(['chat', roomId], { relativeTo: this.route });
+    }
   }
 
   onClear() {

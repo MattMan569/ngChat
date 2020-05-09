@@ -12,14 +12,16 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { DialogComponent } from './dialog/dialog.component';
+import { PasswordComponent } from './dialogs/password/password.component';
+import { InfoComponent } from './dialogs/info/info.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    DialogComponent,
+    PasswordComponent,
+    InfoComponent,
   ],
   imports: [
     BrowserModule,

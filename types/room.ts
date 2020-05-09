@@ -6,6 +6,10 @@ export interface IRoom {
   description: string;
   isLocked: boolean;
   password: string;
+  authorizedUsers: Array<{
+    user: string;
+    time: number;
+  }>;
   isLimited: boolean;
   capacity: number;
   owner: string | IUser;

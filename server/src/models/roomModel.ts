@@ -8,12 +8,14 @@ import IRoom from 'types/room';
 interface IRoomDocument extends Document, IRoom {
   addUserToRoom(userId: string, socketId: string): Promise<IRoomDocument>;
   removeUserFromRoom(userId: string): Promise<IRoomDocument>;
+  authorizeUser(userId: string, password: string): Promise<boolean>;
 }
 
 // Define model statics
 interface IRoomModel extends Model<IRoomDocument> {
   addUserToRoom(roomId: string, userId: string, socketId: string): Promise<IRoomDocument>;
   removeUserFromRoom(roomId: string, userId: string): Promise<IRoomDocument>;
+  authorizeUser(roomId: string, userId: string, password: string): Promise<boolean>;
 }
 
 const roomSchema = new mongoose.Schema({
@@ -38,6 +40,13 @@ const roomSchema = new mongoose.Schema({
     },
     trim: true,
   },
+  authorizedUsers: [{
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: User,
+    },
+    time: Number,
+  }],
   isLimited: {
     type: Boolean,
     required: true,
@@ -84,6 +93,38 @@ roomSchema.methods.removeUserFromRoom = async function(this: IRoomDocument, user
   }, {
     new: true,
   }).exec();
+};
+
+roomSchema.methods.authorizeUser = async function(this: IRoomDocument, userId: string, password: string) {
+  // Correct password
+  if (this.password === password) {
+    // Check if the user has been authorized for this room before
+    // Is ObjectId type in db
+    // tslint:disable-next-line: triple-equals
+    const index = this.authorizedUsers.findIndex(o => o.user == userId);
+
+    // Been authorized before, update auth timestamp
+    if (index >= 0) {
+      this.authorizedUsers[index].time = new Date().getTime();
+      await this.save();
+      return true;
+    }
+
+    // Never been authorized before, push new object
+    await this.updateOne({
+      $push: {
+        authorizedUsers: {
+          user: userId,
+          time: (new Date().getTime()),
+        },
+      },
+    }).exec();
+
+    return true;
+  }
+
+  // Incorrect password
+  return false;
 };
 
 roomSchema.statics.addUserToRoom = async (roomId: string, userId: string, socketId: string) => {

@@ -7,6 +7,8 @@ export const router = express.Router();
 
 router.post('/', isAuthorized, roomControllers.createRoom);
 
+router.post('/join/:id', isAuthorized, roomControllers.joinRoom);
+
 router.patch('/:id', isAuthorized, roomControllers.updateRoom);
 
 router.get('/search', roomControllers.search);

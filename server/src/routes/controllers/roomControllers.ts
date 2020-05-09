@@ -7,6 +7,7 @@ export const createRoom = async (req: Request, res: Response) => {
   try {
     const roomData: IRoom = req.body;
     roomData.owner = req.session?._id as string;
+    roomData.authorizedUsers = [];
     roomData.users = [];
 
     if (!roomData.tags) {
@@ -76,6 +77,27 @@ export const getRoom = async (req: Request, res: Response) => {
   }
 };
 
+export const joinRoom = async (req: Request, res: Response) => {
+  try {
+    const room = await Room.findById(req.params.id);
+
+    if (!room) {
+      return res.status(400).json('Invalid room id');
+    }
+
+    if (!room.isLocked) {
+      return res.json('Room is not locked');
+    }
+
+    const success = await room.authorizeUser(req.session?._id as string, req.body.password);
+
+    success ? res.json() : res.status(400).json('Incorrect password');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json();
+  }
+};
+
 export const search = async (req: Request, res: Response) => {
   try {
     if (!req.query.query) {
@@ -131,6 +153,7 @@ export default {
   updateRoom,
   getRooms,
   getRoom,
+  joinRoom,
   search,
   deleteRoom,
 };

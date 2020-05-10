@@ -14,6 +14,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { PasswordComponent } from './dialogs/password/password.component';
 import { InfoComponent } from './dialogs/info/info.component';
+import { ConfirmComponent } from './dialogs/confirm/confirm.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { InfoComponent } from './dialogs/info/info.component';
     FooterComponent,
     PasswordComponent,
     InfoComponent,
+    ConfirmComponent,
   ],
   imports: [
     BrowserModule,

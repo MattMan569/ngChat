@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { RoomService } from '../../services/room.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+
+import { RoomService } from '../../services/room.service';
+import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import IRoom from 'types/room';
 
 @Component({
@@ -18,7 +21,11 @@ export class CreateComponent implements OnInit {
   mode: 'create' | 'edit';
   private id: string;
 
-  constructor(private roomService: RoomService, private route: ActivatedRoute) { }
+  constructor(
+    private roomService: RoomService,
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    ) { }
 
   ngOnInit(): void {
     // Setup the reactive form
@@ -146,7 +153,15 @@ export class CreateComponent implements OnInit {
   }
 
   onDelete() {
-    // TODO confirmation dialog
-    this.roomService.deleteRoom(this.id);
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      data:  `Are you sure you want to delete ${this.room.name}?`,
+      position: { top: '25%' },
+    });
+
+    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+      if (isConfirmed) {
+        this.roomService.deleteRoom(this.id);
+      }
+    });
   }
 }

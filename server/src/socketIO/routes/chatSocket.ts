@@ -17,7 +17,7 @@ export const chatSocket = (io: Server) => {
       const room = await (await Room.addUserToRoom(roomId, auth._id, socket.id)).populate('users.user').execPopulate();
 
       // Reject the connection if the user is not authorized
-      if (!isUserAuthorized(room, auth._id)) {
+      if (room.isLocked && !isUserAuthorized(room, auth._id)) {
         socket.emit(
           'message',
           'You are not authorized for this room. Please leave and re-enter the password. To prevent disconnection, do not refresh the page after joining a room.',

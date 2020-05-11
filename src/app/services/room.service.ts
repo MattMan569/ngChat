@@ -28,8 +28,8 @@ export class RoomService {
       .subscribe(() => {
         this.openDialog('Room successfully created');
         this.router.navigate(['/rooms']);
-      }, (error) => {
-        // TODO room create error
+      }, (error: HttpErrorResponse) => {
+        this.openDialog(error.error);
         console.error(error);
       });
   }

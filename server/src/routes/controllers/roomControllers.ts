@@ -26,6 +26,13 @@ export const createRoom = async (req: Request, res: Response) => {
     res.status(201).json(room);
   } catch (error) {
     // TODO invalid req.session?
+
+    if (error.name === 'ValidationError') {
+      if (error.errors?.name.kind === 'unique') {
+        return res.status(400).json(`Room name '${error.errors.name.value}' is taken`);
+      }
+    }
+
     console.error(error);
     res.status(500).json('Internal server error');
   }

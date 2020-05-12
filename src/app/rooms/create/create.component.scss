@@ -2,10 +2,6 @@ form > * {
   display: block;
 }
 
-button {
-  margin-top: 1rem;
-}
-
 mat-card {
   max-width: 768px;
   margin: 0 auto;
@@ -22,4 +18,13 @@ mat-slider {
 #buttons {
   display: flex;
   justify-content: space-between;
+  margin-top: 1rem;
+
+  #spinner-div {
+    display: flex;
+
+    button {
+      margin-right: 1rem;
+    }
+  }
 }

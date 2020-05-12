@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,16 +12,19 @@ import IRoom from 'types/room';
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.scss'],
 })
-export class CreateComponent implements OnInit {
+export class CreateComponent implements OnInit, AfterViewInit {
   form: FormGroup;
   room: IRoom;
   isLocked = false;
   isLimited = false;
   isLoading = false;
   mode: 'create' | 'edit';
+  spinnerDiameter: number;
+  @ViewChild('spinnerDiv') spinnerDiv: ElementRef;
   private id: string;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private roomService: RoomService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
@@ -89,6 +92,11 @@ export class CreateComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    this.spinnerDiameter = (this.spinnerDiv.nativeElement as HTMLDivElement).offsetHeight;
+    this.cdRef.detectChanges();
+  }
+
   // Toggle the disable on the password field
   onLockChange() {
     if (!this.form.controls.isLocked.value) {
@@ -122,7 +130,7 @@ export class CreateComponent implements OnInit {
     }
   }
 
-  onRoomSubmit() {
+  async onRoomSubmit() {
     // If the room is locked there must be a password
     if (this.form.controls.isLocked.value) {
       if (!this.form.controls.password.value) {
@@ -146,9 +154,11 @@ export class CreateComponent implements OnInit {
     this.isLoading = true;
 
     if (this.mode === 'create') {
-      this.roomService.createRoom(this.form.value);
+      await this.roomService.createRoom(this.form.value);
+      this.isLoading = false;
     } else {
-      this.roomService.updateRoom({_id: this.room._id, ...this.form.value});
+      await this.roomService.updateRoom({_id: this.room._id, ...this.form.value});
+      this.isLoading = false;
     }
   }
 

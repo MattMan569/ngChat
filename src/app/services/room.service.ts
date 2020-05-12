@@ -24,24 +24,32 @@ export class RoomService {
   }
 
   createRoom(roomData: IRoom) {
-    this.http.post<IRoom>(SERVER_URL, roomData)
-      .subscribe(() => {
-        this.openDialog('Room successfully created');
-        this.router.navigate(['/rooms']);
-      }, (error: HttpErrorResponse) => {
-        this.openDialog(error.error);
-        console.error(error);
-      });
+    return new Promise<boolean>((resolve) => {
+      this.http.post<IRoom>(SERVER_URL, roomData)
+        .subscribe(() => {
+          this.openDialog('Room successfully created');
+          this.router.navigate(['/rooms']);
+          resolve(true);
+        }, (error: HttpErrorResponse) => {
+          resolve(false);
+          this.openDialog(error.error);
+          console.error(error);
+        });
+    });
   }
 
   updateRoom(roomData: IRoom) {
-    this.http.patch<IRoom>(`${SERVER_URL}/${roomData._id}`, roomData)
-      .subscribe(() => {
-        this.openDialog('Room successfully updated');
-        this.router.navigate(['/rooms']);
-      }, (error) => {
-        console.error(error);
-      });
+    return new Promise<boolean>((resolve) => {
+      this.http.patch<IRoom>(`${SERVER_URL}/${roomData._id}`, roomData)
+        .subscribe(() => {
+          this.openDialog('Room successfully updated');
+          this.router.navigate(['/rooms']);
+          resolve(true);
+        }, (error) => {
+          resolve(false);
+          console.error(error);
+        });
+    });
   }
 
   deleteRoom(roomId: string) {

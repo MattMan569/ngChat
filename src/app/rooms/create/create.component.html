@@ -1,4 +1,4 @@
-<mat-card *ngIf="!isLoading">
+<mat-card>
   <form autocomplete="off" [formGroup]="form" (submit)="onRoomSubmit()">
     <mat-form-field>
       <input
@@ -72,10 +72,17 @@
       </mat-hint>
     </mat-form-field>
 
-    <div id="buttons">
-      <button mat-raised-button color="primary" type="submit">
-        {{ mode === "edit" ? "Save" : "Create" }}
-      </button>
+    <div id="buttons" #buttonsDiv>
+      <div id="spinner-div" #spinnerDiv>
+        <button mat-raised-button color="primary" type="submit">
+          {{ mode === "edit" ? "Save" : "Create" }}
+        </button>
+        <mat-spinner
+          [diameter]="spinnerDiameter"
+          *ngIf="isLoading"
+        ></mat-spinner>
+      </div>
+
       <button
         mat-raised-button
         color="warn"

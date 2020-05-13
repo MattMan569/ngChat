@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { connect } from 'socket.io-client';
-import { environment } from './../../../environments/environment';
-import { AuthService } from '../../services/auth.service';
+import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
+
 import IUser from 'types/user';
+import IMessage from 'types/message';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
   private socket: SocketIOClient.Socket;
-  private messages: string[] = [];
-  private messagesOb = new Subject<string[]>();
+  private messages: IMessage[] = [];
+  private messagesOb = new Subject<IMessage[]>();
   private users: Array<{ socketId: string, user: IUser}>;
   private usersOb = new Subject<Array<{ socketId: string, user: IUser}>>();
 
@@ -44,7 +46,7 @@ export class ChatService {
   }
 
   private eventHandler() {
-    this.socket.on('message', (message: string) => {
+    this.socket.on('message', (message: IMessage) => {
       this.messages.push(message);
       this.messagesOb.next([...this.messages]);
     });

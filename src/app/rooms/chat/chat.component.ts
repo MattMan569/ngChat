@@ -3,8 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Subscription } from 'rxjs';
-import { ChatService } from './chat.service';
+
+import { ChatService } from '../../services/chat.service';
 import IUser from 'types/user';
+import IMessage from 'types/message';
 
 @Component({
   selector: 'app-chat',
@@ -13,7 +15,7 @@ import IUser from 'types/user';
 })
 export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   form: FormGroup;
-  messages: string[] = [];
+  messages: IMessage[] = [];
   users: Array<{ socketId: string; user: IUser; }>;
   private messagesSub: Subscription;
   private usersSub: Subscription;

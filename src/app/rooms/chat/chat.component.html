@@ -14,8 +14,24 @@
 
   <cdk-virtual-scroll-viewport [itemSize]="50" id="messages" #messageViewport>
     <mat-card *cdkVirtualFor="let message of messages">
+      <mat-card-header>
+        <mat-card-title>
+          <div *ngIf="message.sender.username === 'server'; else senderElse">
+            {{ message.sender.username | uppercase }}
+          </div>
+
+          <ng-template #senderElse>
+            {{ message.sender.username }}
+          </ng-template>
+        </mat-card-title>
+
+        <mat-card-subtitle>
+          {{ message.createdAt | date : 'shortTime' }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
       <mat-card-content>
-        {{ message }}
+        {{ message.message }}
       </mat-card-content>
     </mat-card>
   </cdk-virtual-scroll-viewport>

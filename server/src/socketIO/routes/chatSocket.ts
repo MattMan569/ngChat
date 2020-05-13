@@ -34,7 +34,7 @@ export const chatSocket = (io: Server) => {
 
       socket.join(roomId);
       socket.emit('message', createMessage(`Welcome, ${auth.username}`, 'server'));
-      socket.broadcast.to(roomId).emit('message', `${auth.username} has joined`);
+      socket.broadcast.to(roomId).emit('message', createMessage(`${auth.username} has joined`, 'server'));
       chat.to(roomId).emit('userListUpdate', room.users);
     });
 

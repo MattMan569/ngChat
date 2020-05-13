@@ -3,7 +3,7 @@
     <mat-card-title>Users</mat-card-title>
     <mat-card-content>
       <mat-nav-list>
-        <cdk-virtual-scroll-viewport [itemSize]="48" #uv>
+        <cdk-virtual-scroll-viewport [itemSize]="48">
           <a mat-list-item href="#" *cdkVirtualFor="let user of users">
             {{ user.user.username }}
           </a>

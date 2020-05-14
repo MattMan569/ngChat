@@ -22,18 +22,33 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
+  /**
+   * Returns an observable for the user's current auth status.
+   * The observable will be updated whenever that status changes,
+   * such as on login.
+   */
   getAuthStatus() {
     return this.authStatus.asObservable();
   }
 
+  /**
+   * Get the user's most recent access token
+   */
   getToken() {
     return this.token;
   }
 
+  /**
+   * Get the user's id
+   */
   getUserId() {
     return this.authData?._id;
   }
 
+  // TODO error popup
+  /**
+   * Create a new user account
+   */
   signup(username: string, email: string, password: string, avatar?: File) {
     const signupData: ISignupData = {
       username,
@@ -50,6 +65,11 @@ export class AuthService {
       });
   }
 
+  /**
+   * Login to an existing account.
+   * The promise resolves without a value on success,
+   * otherwise it resolves with the error message.
+   */
   login(username: string, password: string) {
     const loginData = {
       username,
@@ -77,6 +97,9 @@ export class AuthService {
     });
   }
 
+  /**
+   * Logout and clear client-side auth data
+   */
   logout() {
     this.token = null;
     this.authData = null;
@@ -86,7 +109,10 @@ export class AuthService {
     this.router.navigate(['/auth/login']);
   }
 
-  // Automatically authenticate the user, if possible
+  /**
+   * Automatically authenticate the user,
+   * if their auth data is present
+   */
   autoAuthUser() {
     const authData = this.getAuthData();
 
@@ -105,7 +131,9 @@ export class AuthService {
     }
   }
 
-  // Save user's auth data to local storage
+  /**
+   * Save the user's auth data to local storage
+   */
   private saveAuthData() {
     localStorage.setItem('token', this.token);
     localStorage.setItem('username', this.authData.username);
@@ -114,7 +142,9 @@ export class AuthService {
     localStorage.setItem('expires', this.authData.expires);
   }
 
-  // Retrieve the user's auth data from local storage
+  /**
+   * Retrieve the user's auth data from local storage
+   */
   private getAuthData(): ILoginResponse {
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('username');
@@ -140,7 +170,9 @@ export class AuthService {
     };
   }
 
-  // Remove the user's authorization data from localstorage
+  /**
+   * Removes the user's auth data from local storage
+   */
   private clearAuthData() {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
@@ -149,8 +181,10 @@ export class AuthService {
     localStorage.removeItem('expires');
   }
 
-  // Logout when the token expires
   // TODO refresh tokens
+  /**
+   * Logout when the user's access token expires
+   */
   private setLogoutTimer() {
     const expiresIn = new Date(this.authData.expires).getTime() - Date.now();
 

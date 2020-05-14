@@ -19,7 +19,11 @@ export class ChatService {
 
   constructor(private authService: AuthService) { }
 
-  // Set up socket connection and return an observable of the incoming messages
+  /**
+   * Set up the socket connection and return an object
+   * containing the observables for changes in the room's
+   * list of users and new messages.
+   */
   connect(roomId: string) {
     this.socket = connect(`${environment.apiUrl}/chat`, {
       query: {
@@ -36,15 +40,24 @@ export class ChatService {
     };
   }
 
+  /**
+   * Send a message to the user's current room
+   */
   sendMessage(message: string) {
     this.socket.emit('sendMessage', message);
   }
 
+  /**
+   * Disconnect the user's socket
+   */
   disconnect() {
     this.messages = [];
     this.socket.disconnect();
   }
 
+  /**
+   * Setup all chat related socketIO event handlers
+   */
   private eventHandler() {
     this.socket.on('message', (message: IMessage) => {
       this.messages.push(message);

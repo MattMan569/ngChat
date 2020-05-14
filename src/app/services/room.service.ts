@@ -19,10 +19,19 @@ export class RoomService {
 
   constructor(private http: HttpClient, private router: Router, private dialog: MatDialog) { }
 
+  /**
+   * Return an observable of the list of rooms
+   */
   getRoomsUpdated() {
     return this.roomsUpdated.asObservable();
   }
 
+  /**
+   * Create a new room.
+   * On success the observable resolves to true.
+   * On failure the observable resolves to false
+   * and a dialog with the error message is created.
+   */
   createRoom(roomData: IRoom) {
     return new Promise<boolean>((resolve) => {
       this.http.post<IRoom>(SERVER_URL, roomData)
@@ -38,6 +47,13 @@ export class RoomService {
     });
   }
 
+  // TODO handle room update errors on server
+  /**
+   * Update an existing room.
+   * On success the observalbe resolves to true.
+   * On failure the observable resolves to false
+   * and a dialog with the error message is created.
+   */
   updateRoom(roomData: IRoom) {
     return new Promise<boolean>((resolve) => {
       this.http.patch<IRoom>(`${SERVER_URL}/${roomData._id}`, roomData)
@@ -47,11 +63,15 @@ export class RoomService {
           resolve(true);
         }, (error) => {
           resolve(false);
+          this.openDialog(error.error);
           console.error(error);
         });
     });
   }
 
+  /**
+   * Delete an existing room.
+   */
   deleteRoom(roomId: string) {
     this.http.delete<IRoom>(`${SERVER_URL}/${roomId}`)
       .subscribe((room) => {
@@ -62,6 +82,11 @@ export class RoomService {
       });
   }
 
+  /**
+   * Update this service's list of rooms from the
+   * full room list from the server.
+   * The updated list will be emitted from the room observable.
+   */
   getRooms() {
     this.http.get<IRoom[]>(SERVER_URL)
       .subscribe((rooms) => {
@@ -72,14 +97,24 @@ export class RoomService {
       });
   }
 
+  /**
+   * Get a specific room
+   */
   getRoom(id: string) {
     return this.http.get<IRoom>(`${SERVER_URL}/${id}`);
   }
 
+  /**
+   * Join a locked room
+   */
   joinRoom(roomId: string, password: string) {
     return this.http.post<boolean>(`${SERVER_URL}/join/${roomId}`, { password });
   }
 
+  /**
+   * Send a search query to the server.
+   * The server searches against room's names and tags.
+   */
   search(query: string) {
     if (!query) {
       return;
@@ -96,10 +131,16 @@ export class RoomService {
     });
   }
 
+  /**
+   * Emit the room list
+   */
   private emitRooms = () => {
     this.roomsUpdated.next([...this.rooms]);
   }
 
+  /**
+   * Create a dialog
+   */
   private openDialog = (message: string, durationMs: number = 3000) => {
     const dialogRef = this.dialog.open(InfoComponent, {
       data: message,

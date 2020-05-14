@@ -79,7 +79,7 @@
         </button>
         <mat-spinner
           [diameter]="spinnerDiameter"
-          *ngIf="isLoading"
+          *ngIf="spinnerDiameter && isLoading"
         ></mat-spinner>
       </div>
 

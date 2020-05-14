@@ -76,7 +76,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
     if (room.isLocked) {
       const dialogRef = this.passwordDialog.open(PasswordComponent, {
         data: roomId,
-        position: { top: '25%' },
+        position: { top: '25vh' },
       });
 
       // If the correct password has been entered, navigate into the room

@@ -165,7 +165,7 @@ export class CreateComponent implements OnInit, AfterViewInit {
   onDelete() {
     const dialogRef = this.dialog.open(ConfirmComponent, {
       data:  `Are you sure you want to delete ${this.room.name}?`,
-      position: { top: '25%' },
+      position: { top: '25vh' },
     });
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {

@@ -42,10 +42,6 @@ export class RoomsComponent implements OnInit, OnDestroy {
       this.isLoading = false;
     });
     this.roomService.getRooms();
-
-    // TODO remove
-    const userId = this.authService.getUserId();
-    this.roomService.joinRoom('5eb36bcf37a93744143d51ba', 'pass');
   }
 
   async onSearch() {

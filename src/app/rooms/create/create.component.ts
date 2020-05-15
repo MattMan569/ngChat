@@ -77,7 +77,7 @@ export class CreateComponent implements OnInit, AfterViewInit {
             password: this.room.isLocked ? this.room.password : null,
             isLimited: this.room.isLimited,
             capacity: this.room.isLimited ? this.room.capacity : null,
-            tags: this.room.tags.join(' '), // TODO verify
+            tags: this.room.tags.join(' '),
           });
 
           // Lock the unused controls

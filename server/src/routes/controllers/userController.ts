@@ -63,7 +63,6 @@ export const loginUser = async (req: Request, res: Response) => {
 
     res.json(response);
   } catch (error) {
-    // TODO
     console.error(error);
     res.status(500).json(error);
   }
@@ -79,7 +78,6 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     res.json(user);
   } catch (error) {
-    // TODO
     console.error(error);
     res.status(500).json(error);
   }

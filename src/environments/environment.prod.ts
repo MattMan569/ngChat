@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  // TODO
+  // TODO deployment
   // apiUrl:
 };

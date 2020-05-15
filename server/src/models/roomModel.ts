@@ -143,6 +143,37 @@ roomSchema.statics.removeUserFromRoom = async (roomId: string, userId: string) =
   }).exec();
 };
 
+roomSchema.statics.authorizeUser = async (roomId: string, userId: string, password: string) => {
+  const room = await Room.findById(roomId);
+
+  if (!room) {
+    return false;
+  }
+
+  if (room.password !== password) {
+    return false;
+  }
+
+  const index = room.authorizedUsers.findIndex(o => o.user == userId);
+
+  if (index >= 0) {
+    room.authorizedUsers[index].time = new Date().getTime();
+    await room.save();
+    return true;
+  }
+
+  await room.updateOne({
+    $push: {
+      authorizedUsers: {
+        user: userId,
+        time: new Date().getTime(),
+      },
+    },
+  }).exec();
+
+  return true;
+};
+
 roomSchema.plugin(mongooseUniqueValidator);
 
 // Always populate the owner and room's users fields

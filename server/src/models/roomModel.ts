@@ -15,7 +15,7 @@ export interface IRoomDocument extends Document, IRoom {
 interface IRoomModel extends Model<IRoomDocument> {
   addUserToRoom(roomId: string, userId: string, socketId: string): Promise<IRoomDocument>;
   removeUserFromRoom(roomId: string, userId: string): Promise<IRoomDocument>;
-  authorizeUser(roomId: string, userId: string, password: string): Promise<boolean>; // TODO auth user static
+  authorizeUser(roomId: string, userId: string, password: string): Promise<boolean>;
 }
 
 const roomSchema = new mongoose.Schema({

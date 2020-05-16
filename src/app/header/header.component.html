@@ -4,43 +4,50 @@
       <a routerLink="/rooms">ngChat</a>
     </h1>
 
-    <span class="spacer"></span>
-
     <ul>
-      <li>
+      <li *ngIf="!isAuthenticated">
         <a
           mat-button
           routerLink="/auth/login"
           routerLinkActive="mat-flat-button"
-          *ngIf="!isAuthenticated"
         >
           Login
         </a>
       </li>
-      <li>
+      <li *ngIf="!isAuthenticated">
         <a
           mat-button
           routerLink="/auth/signup"
           routerLinkActive="mat-flat-button"
-          *ngIf="!isAuthenticated"
         >
           Signup
         </a>
       </li>
-      <li>
+      <li *ngIf="isAuthenticated">
         <a
           mat-button
           routerLink="/rooms/create"
           routerLinkActive="mat-flat-button"
-          *ngIf="isAuthenticated"
         >
           Create Room
         </a>
       </li>
-      <li>
-        <button mat-button (click)="onLogout()" *ngIf="isAuthenticated">
-          Logout
+      <li *ngIf="isAuthenticated">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <!-- TODO user's avatar as image -->
+          <img src="https://material.io/resources/icons/static/ic_icons_192px_light.svg" alt="img">
         </button>
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <mat-icon>account_circle</mat-icon>
+            <span>Profile</span>
+          </button>
+          <button mat-menu-item (click)="onLogout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
       </li>
     </ul>
   </mat-toolbar>

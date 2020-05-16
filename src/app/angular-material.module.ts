@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
@@ -28,6 +29,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatExpansionModule,
     MatIconModule,
     MatDialogModule,
+    MatMenuModule,
     ScrollingModule,
   ],
 })

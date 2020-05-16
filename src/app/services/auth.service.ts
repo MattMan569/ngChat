@@ -104,9 +104,9 @@ export class AuthService {
     this.token = null;
     this.authData = null;
     this.authStatus.next(false);
+    this.router.navigate(['/auth/login']);
     this.clearAuthData();
     clearTimeout(this.logoutTimer);
-    this.router.navigate(['/auth/login']);
   }
 
   /**

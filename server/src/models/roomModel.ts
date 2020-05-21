@@ -154,6 +154,7 @@ roomSchema.statics.authorizeUser = async (roomId: string, userId: string, passwo
     return false;
   }
 
+  // tslint:disable-next-line: triple-equals
   const index = room.authorizedUsers.findIndex(o => o.user == userId);
 
   if (index >= 0) {

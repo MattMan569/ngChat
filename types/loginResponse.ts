@@ -1,7 +1,7 @@
 import ITokenPayload from './tokenPayload';
 
 export interface ILoginResponse {
-  token: string;
+  accessToken: string;
   payload: ITokenPayload;
 }
 

@@ -27,7 +27,7 @@ export class ChatService {
   connect(roomId: string) {
     this.socket = connect(`${environment.apiUrl}/chat`, {
       query: {
-        token: this.authService.getToken(),
+        token: this.authService.getToken().accessToken,
         roomId,
       },
     });

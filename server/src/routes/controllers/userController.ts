@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import jwtUtil from '../../util/jwt';
 
 import User from './../../models/userModel';
+import Auth from './../../models/authModel';
 import ISignupData from 'types/signupData';
 import ILoginResponse from 'types/loginResponse';
 
@@ -44,15 +45,17 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(401).json('Password is incorrect');
     }
 
-    if (!process.env.JWT_EXPIRES_IN) {
-      throw new Error('Environment variable JWT_EXPIRES_IN is undefined.');
-    }
+    const accessToken = jwtUtil.encodeAccessToken(user.username, user.email, user._id);
+    const refreshToken = jwtUtil.encodeRefreshToken(user._id);
+    const expires = getExpires();
 
-    const token = jwtUtil.encodeAccessToken(user.username, user.email, user._id);
-    const expires = new Date(Date.now() + parseInt(process.env.JWT_EXPIRES_IN, 10)).toISOString();
+    Auth.create({
+      user: user._id,
+      refreshToken,
+    });
 
     const response: ILoginResponse = {
-      token,
+      accessToken,
       payload: {
         username: user.username,
         email: user.email,
@@ -60,6 +63,11 @@ export const loginUser = async (req: Request, res: Response) => {
         expires,
       },
     };
+
+    res.cookie('jwt_refresh', refreshToken, {
+      httpOnly: true,
+      signed: true,
+    });
 
     res.json(response);
   } catch (error) {
@@ -83,8 +91,60 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
+export const newAccessToken = async (req: Request, res: Response) => {
+  // TODO give new refresh token
+  // send logic to new function or db static
+
+  const refreshToken = req.signedCookies.jwt_refresh;
+
+  // No token has been provided
+  if (!refreshToken) {
+    res.status(401).json();
+  }
+
+  const auth = await Auth.findOne({
+    refreshToken,
+  });
+
+  // The provided refresh token is not currently authorized
+  if (!auth) {
+    res.status(403).json();
+  }
+
+  const userId = jwtUtil.decodeRefreshToken(refreshToken);
+
+  if (!userId) {
+    console.error(`User authorized with invalid refresh token`);
+    return res.status(500).json();
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    console.error(`User ID ${userId} with valid token, user not found in DB`);
+    return res.status(500).json();
+  }
+
+  const accessToken = jwtUtil.encodeAccessToken(user.username, user.email, user._id);
+  const expires = getExpires();
+
+  res.json({ accessToken, expires });
+};
+
+/**
+ * Convert the value specified in the environment variable to a Date ISO string
+ */
+const getExpires = () => {
+  if (!process.env.JWT_EXPIRES_IN) {
+    throw new Error('Environment variable JWT_EXPIRES_IN is undefined.');
+  }
+
+  return new Date(Date.now() + parseInt(process.env.JWT_EXPIRES_IN, 10)).toISOString();
+};
+
 export default {
   createUser,
   loginUser,
   deleteUser,
+  newAccessToken,
 };

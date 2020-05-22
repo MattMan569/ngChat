@@ -8,6 +8,7 @@ import IUser from 'types/user';
 import ISignupData from 'types/signupData';
 import ITokenPayload from 'types/tokenPayload';
 import ILoginResponse from 'types/loginResponse';
+import { tap } from 'rxjs/operators';
 
 const SERVER_URL = `${environment.apiUrl}/user`;
 
@@ -15,7 +16,7 @@ const SERVER_URL = `${environment.apiUrl}/user`;
   providedIn: 'root',
 })
 export class AuthService {
-  private token: string;
+  private accessToken: string;
   private authData: ITokenPayload;
   private authStatus = new BehaviorSubject<boolean>(false);
   private logoutTimer: ReturnType<typeof setTimeout>;
@@ -32,10 +33,13 @@ export class AuthService {
   }
 
   /**
-   * Get the user's most recent access token
+   * Get the user's most recent access token with its expiry time
    */
-  getToken() {
-    return this.token;
+  getToken(): { accessToken: string, expires: string } {
+    return {
+      accessToken: this.accessToken,
+      expires: this.authData?.expires,
+    };
   }
 
   /**
@@ -80,10 +84,10 @@ export class AuthService {
     // On success, set auth info and redirect to room listing
     // On failure, resolve the promise with the error message
     return new Promise<string>((resolve, reject) => {
-      this.http.post<ILoginResponse>(`${SERVER_URL}/login`, loginData)
+      this.http.post<ILoginResponse>(`${SERVER_URL}/login`, loginData, { withCredentials: true })
         .subscribe((response) => {
           resolve();
-          this.token = response.token;
+          this.accessToken = response.accessToken;
           this.authData = response.payload;
           this.authStatus.next(true);
           this.saveAuthData();
@@ -101,7 +105,7 @@ export class AuthService {
    * Logout and clear client-side auth data
    */
   logout() {
-    this.token = null;
+    this.accessToken = null;
     this.authData = null;
     this.authStatus.next(false);
     this.router.navigate(['/auth/login']);
@@ -120,22 +124,32 @@ export class AuthService {
       return;
     }
 
-    const expiresIn = new Date(authData.payload.expires).getTime() - Date.now();
+    this.accessToken = authData.accessToken;
+    this.authData = authData.payload;
+    this.authStatus.next(true);
+    this.setLogoutTimer();
+  }
 
-    // If the token has not yet expires, authenticate
-    if (expiresIn > 0) {
-      this.token = authData.token;
-      this.authData = authData.payload;
-      this.authStatus.next(true);
-      this.setLogoutTimer();
-    }
+  /**
+   * Get a new access token from the server
+   */
+  refreshAccessToken() {
+    return this.http.post<{ accessToken: string, expires: string }>(`${SERVER_URL}/token`, null, { withCredentials: true })
+      .pipe(tap((response) => {
+        this.accessToken = response.accessToken;
+        this.authData.expires = response.expires;
+        this.saveAuthData();
+      }, (error: HttpErrorResponse) => {
+        console.error(error);
+        // TODO logout?
+      }));
   }
 
   /**
    * Save the user's auth data to local storage
    */
   private saveAuthData() {
-    localStorage.setItem('token', this.token);
+    localStorage.setItem('accessToken', this.accessToken);
     localStorage.setItem('username', this.authData.username);
     localStorage.setItem('email', this.authData.email);
     localStorage.setItem('_id', this.authData._id);
@@ -146,14 +160,14 @@ export class AuthService {
    * Retrieve the user's auth data from local storage
    */
   private getAuthData(): ILoginResponse {
-    const token = localStorage.getItem('token');
+    const accessToken = localStorage.getItem('accessToken');
     const username = localStorage.getItem('username');
     const email = localStorage.getItem('email');
     const id = localStorage.getItem('_id');
     const expires = localStorage.getItem('expires');
 
     // Ensure all values were retrieved
-    if (!token || !username || !email || !id || !expires) {
+    if (!accessToken || !username || !email || !id || !expires) {
       return;
     }
 
@@ -165,7 +179,7 @@ export class AuthService {
     };
 
     return {
-      token,
+      accessToken,
       payload,
     };
   }
@@ -174,22 +188,22 @@ export class AuthService {
    * Removes the user's auth data from local storage
    */
   private clearAuthData() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
     localStorage.removeItem('username');
     localStorage.removeItem('email');
     localStorage.removeItem('_id');
     localStorage.removeItem('expires');
   }
 
-  // TODO refresh tokens
+  // TODO remove?
   /**
    * Logout when the user's access token expires
    */
   private setLogoutTimer() {
     const expiresIn = new Date(this.authData.expires).getTime() - Date.now();
 
-    this.logoutTimer = setTimeout(() => {
-      this.logout();
-    }, expiresIn);
+    // this.logoutTimer = setTimeout(() => {
+    //   this.logout();
+    // }, expiresIn);
   }
 }

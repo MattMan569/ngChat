@@ -11,4 +11,6 @@ router.post('/login', userControllers.loginUser);
 
 router.post('/delete', isAuthorized, userControllers.deleteUser);
 
+router.post('/token', userControllers.newAccessToken);
+
 export default router;

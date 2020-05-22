@@ -40,7 +40,39 @@ export const decodeAccessToken = (token: string): IToken | false => {
   }
 };
 
+export const encodeRefreshToken = (
+  id: string,
+) => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('Environment variable JWT_SECRET is undefined.');
+  }
+
+  const token = jwt.sign({
+    _id: id,
+  }, process.env.JWT_SECRET);
+
+  return token;
+};
+
+/**
+ * Returns the corresponding user's id if the token if valid,
+ * false otherwise
+ */
+export const decodeRefreshToken = (token: string): string | false => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('Environment variable JWT_SECRET is undefined.');
+  }
+
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET) as string;
+  } catch (error) {
+    return false;
+  }
+};
+
 export default {
   encodeAccessToken,
   decodeAccessToken,
+  encodeRefreshToken,
+  decodeRefreshToken,
 };

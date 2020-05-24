@@ -8,7 +8,6 @@ import IUser from 'types/user';
 import ISignupData from 'types/signupData';
 import ITokenPayload from 'types/tokenPayload';
 import ILoginResponse from 'types/loginResponse';
-import { tap } from 'rxjs/operators';
 
 const SERVER_URL = `${environment.apiUrl}/user`;
 
@@ -19,7 +18,7 @@ export class AuthService {
   private accessToken: string;
   private authData: ITokenPayload;
   private authStatus = new BehaviorSubject<boolean>(false);
-  private logoutTimer: ReturnType<typeof setTimeout>;
+  private refreshTimer: ReturnType<typeof setTimeout>;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -91,7 +90,7 @@ export class AuthService {
           this.authData = response.payload;
           this.authStatus.next(true);
           this.saveAuthData();
-          this.setLogoutTimer();
+          this.setRefreshTimer();
           this.router.navigate(['/']);
         }, (error: HttpErrorResponse) => {
           resolve(error.error);
@@ -110,7 +109,7 @@ export class AuthService {
     this.authStatus.next(false);
     this.router.navigate(['/auth/login']);
     this.clearAuthData();
-    clearTimeout(this.logoutTimer);
+    clearTimeout(this.refreshTimer);
   }
 
   /**
@@ -127,22 +126,23 @@ export class AuthService {
     this.accessToken = authData.accessToken;
     this.authData = authData.payload;
     this.authStatus.next(true);
-    this.setLogoutTimer();
+    this.setRefreshTimer();
   }
 
   /**
-   * Get a new access token from the server
+   * Get a new access token from the server.
    */
   refreshAccessToken() {
-    return this.http.post<{ accessToken: string, expires: string }>(`${SERVER_URL}/token`, null, { withCredentials: true })
-      .pipe(tap((response) => {
-        this.accessToken = response.accessToken;
-        this.authData.expires = response.expires;
-        this.saveAuthData();
-      }, (error: HttpErrorResponse) => {
-        console.error(error);
-        // TODO logout?
-      }));
+    const httpOb = this.http.post<{ accessToken: string, expires: string }>(`${SERVER_URL}/token`, null, { withCredentials: true });
+
+    httpOb.subscribe((response) => {
+      this.accessToken = response.accessToken;
+      this.authData.expires = response.expires;
+      this.saveAuthData();
+      this.setRefreshTimer();
+    });
+
+    return httpOb;
   }
 
   /**
@@ -195,15 +195,33 @@ export class AuthService {
     localStorage.removeItem('expires');
   }
 
-  // TODO remove?
   /**
-   * Logout when the user's access token expires
+   * Automatically refresh the access token shortly before it expires
    */
-  private setLogoutTimer() {
-    const expiresIn = new Date(this.authData.expires).getTime() - Date.now();
+  private setRefreshTimer() {
+    // If the token has already expired, refresh it immediately
+    if (this.tokenNeedsToBeRefreshed()) {
+      this.refreshAccessToken();
+      return;
+    }
 
-    // this.logoutTimer = setTimeout(() => {
-    //   this.logout();
-    // }, expiresIn);
+    // Get the timer value by subtracting the current time with the margin from the expiry time
+    const refreshTime = new Date(this.authData.expires).getTime() - (new Date().getTime() + environment.autoRefreshTokenTimeMargin);
+
+    clearTimeout(this.refreshTimer);
+    this.refreshTimer = setTimeout(() => {
+      this.refreshAccessToken();
+    }, refreshTime);
+  }
+
+  /**
+   * Returns true if the tokens expiry time has already passed
+   * or is within the auto refresh margin
+   */
+  private tokenNeedsToBeRefreshed = () => {
+    const now = new Date().getTime();
+    const expiry = new Date(this.authData.expires).getTime();
+
+    return expiry <= now - environment.autoRefreshTokenTimeMargin;
   }
 }

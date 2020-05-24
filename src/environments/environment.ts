@@ -5,6 +5,13 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:4201/api',
+
+  /**
+   * The amount of time in ms to remove from the auto access token refresh timer.
+   * Eg) If set to 10,000 then the request to the server to refresh the token
+   * will be sent 10 seconds before it expires.
+   */
+  autoRefreshTokenTimeMargin: 10000,
 };
 
 /*

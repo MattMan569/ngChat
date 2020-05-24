@@ -15,18 +15,16 @@ export const createRoom = async (req: Request, res: Response) => {
     }
 
     if (roomData.isLocked && !roomData.password) {
-      return res.status(401).json('Locked rooms must have a password');
+      return res.status(400).json('Locked rooms must have a password');
     }
 
     if (roomData.isLimited && !roomData.capacity) {
-      return res.status(401).json('Rooms with limited capacity must specify a capacity');
+      return res.status(400).json('Rooms with limited capacity must specify a capacity');
     }
 
     const room = await Room.create(req.body);
     res.status(201).json(room);
   } catch (error) {
-    // TODO invalid req.session?
-
     if (error.name === 'ValidationError') {
       if (error.errors?.name.kind === 'unique') {
         return res.status(400).json(`Room name '${error.errors.name.value}' is taken`);

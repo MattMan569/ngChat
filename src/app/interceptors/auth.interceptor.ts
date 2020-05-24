@@ -48,8 +48,6 @@ export class AuthInterceptor implements HttpInterceptor {
         filter(token => token != null),
         take(1),
         switchMap((token: string) => {
-          // TODO verify the type of token
-          console.log('token:', token);
           const refreshedReq = this.addAuthHeader(req, token);
           return next.handle(refreshedReq);
         }),

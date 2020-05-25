@@ -6,8 +6,6 @@ import IRoom from 'types/room';
 
 // Define document methods
 export interface IRoomDocument extends Document, IRoom {
-  addUserToRoom(userId: string, socketId: string): Promise<IRoomDocument>;
-  removeUserFromRoom(userId: string): Promise<IRoomDocument>;
   authorizeUser(userId: string, password: string): Promise<boolean>;
 }
 
@@ -78,22 +76,6 @@ const roomSchema = new mongoose.Schema({
 }, {
   timestamps: true,
 });
-
-roomSchema.methods.addUserToRoom = async function(this: IRoomDocument, userId: string, socketId: string) {
-  return this.updateOne({
-    $push: { users: { user: userId, socketId } },
-  }, {
-    new: true, // TODO check if new actually works here, or just returns query
-  }).exec();
-};
-
-roomSchema.methods.removeUserFromRoom = async function(this: IRoomDocument, userId: string) {
-  return this.updateOne({
-    $pull: { users: { user: userId } },
-  }, {
-    new: true,
-  }).exec();
-};
 
 roomSchema.methods.authorizeUser = async function(this: IRoomDocument, userId: string, password: string) {
   // Correct password

@@ -5,10 +5,9 @@ import IAuth from 'types/auth';
 
 export interface IAuthDocument extends Document, IAuth {}
 
-// TODO add static for adding a refresh token for a user
-// if user exists, update refresh token,
-// else create a new document
-export interface IAuthModel extends Model<IAuthDocument> {}
+export interface IAuthModel extends Model<IAuthDocument> {
+  authorizeUser(userId: string, refreshToken: string): Promise<IAuthDocument>;
+}
 
 const authSchema = new mongoose.Schema({
   user: {
@@ -23,6 +22,25 @@ const authSchema = new mongoose.Schema({
 }, {
   timestamps: true,
 });
+
+authSchema.statics.authorizeUser = async (userId: string, refreshToken: string) => {
+  const auth = await Auth.findOne({ user: userId });
+
+  if (!auth) {
+    // Verify the provided user ID
+    if (!await User.findById(userId)) {
+      throw new Error('Invalid user id');
+    }
+
+    return await Auth.create({
+      user: userId,
+      refreshToken,
+    });
+  } else {
+    auth.refreshToken = refreshToken;
+    return await auth.save();
+  }
+};
 
 export const Auth = mongoose.model <IAuthDocument, IAuthModel>('Auth', authSchema);
 

@@ -49,10 +49,7 @@ export const loginUser = async (req: Request, res: Response) => {
     const refreshToken = jwtUtil.encodeRefreshToken(user._id);
     const expires = getExpires();
 
-    Auth.create({
-      user: user._id,
-      refreshToken,
-    });
+    await Auth.authorizeUser(user._id, refreshToken);
 
     const response: ILoginResponse = {
       accessToken,

@@ -23,9 +23,22 @@ export const createUser = async (req: Request, res: Response) => {
 
     res.status(201).json(user);
   } catch (error) {
-    // TODO
+    if (error.name === 'ValidationError') {
+      let errorMessage = '';
+
+      if (error.errors.email?.kind === 'unique') {
+        errorMessage += `Email ${error.errors.email.value} is taken`;
+      }
+      if (error.errors.username?.kind === 'unique') {
+        if (errorMessage) { errorMessage += '\n'; }
+        errorMessage += `Username ${error.errors.username.value} is taken`;
+      }
+
+      return res.status(400).json(errorMessage);
+    }
+
     console.error(error);
-    res.status(500).json(error);
+    res.status(500).json();
   }
 };
 

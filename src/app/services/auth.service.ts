@@ -60,12 +60,16 @@ export class AuthService {
       avatar,
     };
 
-    this.http.post<IUser>(`${SERVER_URL}/signup`, signupData)
-      .subscribe(() => {
-        this.router.navigate(['/auth/login']);
-      }, () => {
-        this.authStatus.next(false);
-      });
+    return new Promise<string>((resolve) => {
+      this.http.post<IUser>(`${SERVER_URL}/signup`, signupData)
+        .subscribe(() => {
+          resolve();
+          this.router.navigate(['/auth/login']);
+        }, (error: HttpErrorResponse) => {
+          resolve(error.error);
+          this.authStatus.next(false);
+        });
+    });
   }
 
   /**
@@ -94,7 +98,6 @@ export class AuthService {
           this.router.navigate(['/']);
         }, (error: HttpErrorResponse) => {
           resolve(error.error);
-          console.error(error);
           this.authStatus.next(false);
         });
     });

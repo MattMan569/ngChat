@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 import { AuthService } from '../../services/auth.service';
 
@@ -11,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
 export class SignupComponent implements OnInit, AfterViewInit {
   form: FormGroup;
   isLoading = false;
+  errorMessage: string;
   spinnerDiameter: number;
   @ViewChild('spinnerDiv') spinnerDiv: ElementRef;
 
@@ -54,7 +56,7 @@ export class SignupComponent implements OnInit, AfterViewInit {
     this.cdRef.detectChanges();
   }
 
-  onSignup() {
+  async onSignup() {
     const password = this.form.controls.password;
     const confirmPassword = this.form.controls.confirmPassword;
 
@@ -74,11 +76,13 @@ export class SignupComponent implements OnInit, AfterViewInit {
 
     this.isLoading = true;
 
-    this.authService.signup(
+    this.errorMessage = await this.authService.signup(
       this.form.value.username,
       this.form.value.email,
       this.form.value.password,
       // TODO avatar
     );
+
+    this.isLoading = false;
   }
 }

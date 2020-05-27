@@ -100,8 +100,6 @@ export class CreateComponent implements OnInit, AfterViewInit {
   // Toggle the disable on the password field
   onLockChange() {
     if (!this.form.controls.isLocked.value) {
-      // TODO if disabled, clear before submit
-      // this.form.controls.password.reset();
       this.form.controls.password.disable();
       this.isLocked = false;
     } else {
@@ -121,7 +119,6 @@ export class CreateComponent implements OnInit, AfterViewInit {
   // Toggle the disable on the capacity field
   onLimitedChange() {
     if (!this.form.controls.isLimited.value) {
-      // TODO if disabled, clear before submit
       this.form.controls.capacity.disable();
       this.isLimited = false;
     } else {

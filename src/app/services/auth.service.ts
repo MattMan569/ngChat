@@ -48,7 +48,6 @@ export class AuthService {
     return this.authData?._id;
   }
 
-  // TODO error popup
   /**
    * Create a new user account
    */

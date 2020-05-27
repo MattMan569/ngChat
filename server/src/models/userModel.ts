@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
   },
   avatarPath: {
     type: String,
-    // TODO
+    // TODO avatar
     // required: true,
   },
 }, {

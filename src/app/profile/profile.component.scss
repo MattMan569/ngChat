@@ -13,15 +13,25 @@ mat-spinner {
   height: 100%;
   max-width: 800px;
 
-  #user-card {
+  #user {
     flex-grow: 1;
 
-    p {
-      text-align: center;
+    mat-card {
+      &:first-of-type {
+        margin-bottom: 1rem;
+      }
+
+      img {
+        margin-bottom: 1rem;
+      }
+
+      &#avatar > p {
+        text-align: center;
+      }
     }
   }
 
-  #bio-card {
+  #bio {
     flex-grow: 4;
     margin-left: 1rem;
     max-height: calc(100% - 2rem); // I hate CSS

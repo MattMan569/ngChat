@@ -17,17 +17,18 @@ mat-spinner {
     flex-grow: 1;
 
     mat-card {
-      &:first-of-type {
+      &:first-of-type, img {
         margin-bottom: 1rem;
       }
 
-      img {
-        margin-bottom: 1rem;
+      button {
+        margin-left: auto;
+        width: 100%
       }
+    }
 
-      &#avatar > p {
-        text-align: center;
-      }
+    #avatar > p {
+      text-align: center;
     }
   }
 

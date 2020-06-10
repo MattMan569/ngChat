@@ -57,7 +57,10 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     console.log('result');
     console.log(result);
 
-    if (result.error) {
+    if (!result) {
+      // TODO popup
+      console.error('Cannot get avatar of unauthenticated user');
+    } else if (result.error) {
       // TODO popup
       console.error(result.error);
     } else {

@@ -33,9 +33,7 @@
         </a>
       </li>
       <li *ngIf="isAuthenticated">
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-          <!-- TODO user's avatar as image -->
-          <img src="https://material.io/resources/icons/static/ic_icons_192px_light.svg" alt="img">
+        <button mat-icon-button [matMenuTriggerFor]="menu" id="accountButton" [style.background-image]="'url(' + avatar + ')'">
         </button>
 
         <mat-menu #menu="matMenu">

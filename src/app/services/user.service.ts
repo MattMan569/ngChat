@@ -10,6 +10,8 @@ const SERVER_URL = `${environment.apiUrl}/user`;
   providedIn: 'root',
 })
 export class UserService {
+  private base64Avatar: string;
+
   constructor(private authService: AuthService, private http: HttpClient) { }
 
   /**
@@ -29,6 +31,7 @@ export class UserService {
     return new Promise((resolve) => {
       this.http.post(`${SERVER_URL}/avatar`, formData)
         .subscribe((base64Img: string) => {
+          this.base64Avatar = base64Img;
           resolve({ base64Img });
         }, (error: HttpErrorResponse) => {
           resolve({ error: error.error });
@@ -42,17 +45,28 @@ export class UserService {
    * and will return false if the user is not currently logged in.
    */
   async getAvatar(userId?: string): Promise<false | { error?: string, base64Img?: string }> {
+    let updateThisAvatar = false;
+
     return new Promise((resolve) => {
       if (!userId) {
+        // Return the avatar if it has previously been retrieved
+        if (this.base64Avatar) {
+          return resolve({ base64Img: this.base64Avatar });
+        }
+
         if (!this.authService.isLoggedIn()) {
-          return false;
+          return resolve(false);
         }
 
         userId = this.authService.getUserId();
+        updateThisAvatar = true;
       }
 
       this.http.get(`${SERVER_URL}/avatar/${userId}`)
         .subscribe((base64Img: string) => {
+          if (updateThisAvatar) {
+            this.base64Avatar = base64Img;
+          }
           resolve({ base64Img });
         }, (error: HttpErrorResponse) => {
           resolve({ error: error.error });

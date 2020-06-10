@@ -38,11 +38,16 @@ export class UserService {
 
   /**
    * Get the avatar of the specified user.
-   * If no user is specified, uses the currently logged in user instead.
+   * If no user is specified, uses the currently logged in user instead
+   * and will return false if the user is not currently logged in.
    */
-  async getAvatar(userId?: string): Promise<{ error?: string, base64Img?: string }> {
+  async getAvatar(userId?: string): Promise<false | { error?: string, base64Img?: string }> {
     return new Promise((resolve) => {
       if (!userId) {
+        if (!this.authService.isLoggedIn()) {
+          return false;
+        }
+
         userId = this.authService.getUserId();
       }
 

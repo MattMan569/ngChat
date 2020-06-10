@@ -193,7 +193,6 @@ export const getAvatar = async (req: Request, res: Response) => {
         console.error('AWS S3 GET error', error);
         res.status(500).json();
       } else {
-        console.log(data);
         res.json(data.Body?.toString('base64'));
       }
     });

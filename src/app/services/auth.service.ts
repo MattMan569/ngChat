@@ -32,6 +32,14 @@ export class AuthService {
   }
 
   /**
+   * Returns a boolean that is true if the user is currently logged in
+   * and false otherwise.
+   */
+  isLoggedIn() {
+    return this.authStatus.getValue();
+  }
+
+  /**
    * Get the user's most recent access token with its expiry time
    */
   getToken(): { accessToken: string, expires: string } {

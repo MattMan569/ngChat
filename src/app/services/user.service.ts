@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { environment } from 'src/environments/environment';
+import { AuthService } from './auth.service';
 
 const SERVER_URL = `${environment.apiUrl}/user`;
 
@@ -9,7 +10,7 @@ const SERVER_URL = `${environment.apiUrl}/user`;
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private http: HttpClient) { }
+  constructor(private authService: AuthService, private http: HttpClient) { }
 
   /**
    * Uploads the provided file to AWS S3 as the user's new avatar.
@@ -35,8 +36,16 @@ export class UserService {
     });
   }
 
-  async getAvatar(userId: string): Promise<{ error?: string, base64Img?: string }> {
+  /**
+   * Get the avatar of the specified user.
+   * If no user is specified, uses the currently logged in user instead.
+   */
+  async getAvatar(userId?: string): Promise<{ error?: string, base64Img?: string }> {
     return new Promise((resolve) => {
+      if (!userId) {
+        userId = this.authService.getUserId();
+      }
+
       this.http.get(`${SERVER_URL}/avatar/${userId}`)
         .subscribe((base64Img: string) => {
           resolve({ base64Img });

@@ -1,4 +1,5 @@
 import express from 'express';
+import multer from 'multer';
 
 import userControllers from './controllers/userController';
 import isAuthorized from './../middleware/isAuthorized';
@@ -12,5 +13,9 @@ router.post('/login', userControllers.loginUser);
 router.post('/delete', isAuthorized, userControllers.deleteUser);
 
 router.post('/token', userControllers.newAccessToken);
+
+router.post('/avatar', isAuthorized, multer().single('avatar'), userControllers.changeAvatar);
+
+router.get('/avatar/:id', userControllers.getAvatar);
 
 export default router;

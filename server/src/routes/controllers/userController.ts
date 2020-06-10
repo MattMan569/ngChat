@@ -1,11 +1,15 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import jwtUtil from '../../util/jwt';
+import aws from 'aws-sdk';
+import sharp from 'sharp';
 
 import User from './../../models/userModel';
 import Auth from './../../models/authModel';
 import ISignupData from 'types/signupData';
 import ILoginResponse from 'types/loginResponse';
+import jwtUtil from '../../util/jwt';
+import s3 from './../../db/s3';
+import expires from './util/expires';
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -60,7 +64,6 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const accessToken = jwtUtil.encodeAccessToken(user.username, user.email, user._id);
     const refreshToken = jwtUtil.encodeRefreshToken(user._id);
-    const expires = getExpires();
 
     await Auth.authorizeUser(user._id, refreshToken);
 
@@ -70,7 +73,7 @@ export const loginUser = async (req: Request, res: Response) => {
         username: user.username,
         email: user.email,
         _id: user._id,
-        expires,
+        expires: expires(),
       },
     };
 
@@ -136,20 +139,68 @@ export const newAccessToken = async (req: Request, res: Response) => {
   }
 
   const accessToken = jwtUtil.encodeAccessToken(user.username, user.email, user._id);
-  const expires = getExpires();
 
-  res.json({ accessToken, expires });
+  res.json({ accessToken, expires: expires() });
 };
 
-/**
- * Convert the value specified in the environment variable to a Date ISO string
- */
-const getExpires = () => {
-  if (!process.env.JWT_EXPIRES_IN) {
-    throw new Error('Environment variable JWT_EXPIRES_IN is undefined.');
+export const changeAvatar = async (req: Request, res: Response) => {
+  if (!process.env.S3_BUCKET_NAME) {
+    throw new Error('Environment variable S3_BUCKET_NAME is undefined');
   }
 
-  return new Date(Date.now() + parseInt(process.env.JWT_EXPIRES_IN, 10)).toISOString();
+  try {
+    const img = await sharp(req.file.buffer)
+      .resize({
+        width: 250,
+        height: 250,
+        background: { r: 255, g: 255, b: 255, alpha: 0 },
+        fit: 'inside',
+      })
+      .png()
+      .toBuffer();
+
+    const encodedImg = img.toString('base64');
+
+    s3.upload({
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: `avatar/${req.session?._id}`,
+      Body: img,
+    }, (error: Error, data: aws.S3.ManagedUpload.SendData) => {
+      if (error) {
+        console.error('AWS S3 ERROR', error);
+        res.status(500).json();
+      } else {
+        res.json(encodedImg);
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json();
+  }
+};
+
+export const getAvatar = async (req: Request, res: Response) => {
+  if (!process.env.S3_BUCKET_NAME) {
+    throw new Error('Environment variable S3_BUCKET_NAME is undefined');
+  }
+
+  try {
+    s3.getObject({
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: `avatar/${req.params.id}`,
+    }, (error, data) => {
+      if (error) {
+        console.error('AWS S3 GET error', error);
+        res.status(500).json();
+      } else {
+        console.log(data);
+        res.json(data.Body?.toString('base64'));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json();
+  }
 };
 
 export default {
@@ -157,4 +208,6 @@ export default {
   loginUser,
   deleteUser,
   newAccessToken,
+  changeAvatar,
+  getAvatar,
 };

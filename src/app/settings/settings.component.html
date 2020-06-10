@@ -1,0 +1,39 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+
+<mat-card *ngIf="!isLoading">
+  <div id="about">
+    <p class="mat-body-2">About</p>
+    <mat-form-field>
+      <textarea matInput placeholder="Tell us a little about yourself..." #bio
+      >This user's bio
+      </textarea>
+    </mat-form-field>
+    <button mat-flat-button color="accent" [disabled]="disableAboutSave" (click)="onSaveBio()">Save</button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div id="avatar-upload">
+    <p class="mat-body-2">Avatar</p>
+    <input
+      hidden="true"
+      type="file"
+      accept="image/*"
+      (change)="onAvatarChange($event)"
+      #avatarInput
+    />
+    <div #spinnerDiv>
+      <button mat-flat-button color="accent" (click)="avatarInput.click()">
+        Choose File
+      </button>
+      <mat-spinner [diameter]="avatarSpinnerDiameter" *ngIf="isLoadingAvatar"></mat-spinner>
+    </div>
+    <!-- TODO avatar -->
+    <img
+      src="https://material.io/resources/icons/static/ic_icons_192px_light.svg"
+      alt="Avatar"
+      [ngClass]="{ 'hidden': isLoadingAvatar }"
+      #avatar
+    />
+  </div>
+</mat-card>

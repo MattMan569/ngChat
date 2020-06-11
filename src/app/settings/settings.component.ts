@@ -54,9 +54,6 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     this.isLoadingAvatar = true;
     const result = await this.userService.getAvatar(this.authService.getUserId());
 
-    console.log('result');
-    console.log(result);
-
     if (!result) {
       // TODO popup
       console.error('Cannot get avatar of unauthenticated user');

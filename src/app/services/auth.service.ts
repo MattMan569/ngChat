@@ -57,6 +57,13 @@ export class AuthService {
   }
 
   /**
+   * Get the user's username
+   */
+  getUsername() {
+    return this.authData?.username;
+  }
+
+  /**
    * Create a new user account
    */
   signup(username: string, email: string, password: string, avatar?: File) {

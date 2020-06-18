@@ -73,4 +73,23 @@ export class UserService {
         });
     });
   }
+
+  /**
+   * Get the username for a user id.
+   * Returns the username on success, false otherwise.
+   */
+  async getUsername(userId: string): Promise<false | string> {
+    return new Promise((resolve) => {
+      if (!userId) {
+        resolve(false);
+      }
+
+      this.http.get(`${SERVER_URL}/${userId}`)
+        .subscribe((username: string) => {
+          resolve(username);
+        }, () => {
+          resolve(false);
+        });
+    });
+  }
 }

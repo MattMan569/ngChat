@@ -18,4 +18,6 @@ router.post('/avatar', isAuthorized, multer().single('avatar'), userControllers.
 
 router.get('/avatar/:id', userControllers.getAvatar);
 
+router.get('/:id', userControllers.getUser);
+
 export default router;

@@ -202,6 +202,16 @@ export const getAvatar = async (req: Request, res: Response) => {
   }
 };
 
+export const getUser = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.json(user?.username);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json();
+  }
+};
+
 export default {
   createUser,
   loginUser,
@@ -209,4 +219,5 @@ export default {
   newAccessToken,
   changeAvatar,
   getAvatar,
+  getUser,
 };

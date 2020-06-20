@@ -235,7 +235,7 @@ export class AuthService {
    * Returns true if the tokens expiry time has already passed
    * or is within the auto refresh margin
    */
-  private tokenNeedsToBeRefreshed = () => {
+  private tokenNeedsToBeRefreshed() {
     const now = new Date().getTime();
     const expiry = new Date(this.authData.expires).getTime();
 

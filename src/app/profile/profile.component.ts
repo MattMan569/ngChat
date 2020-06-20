@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { UserService } from '../services/user.service';
@@ -12,6 +12,7 @@ import { AuthService } from '../services/auth.service';
 export class ProfileComponent implements OnInit {
   isLoading = false;
   username: string;
+  @ViewChild('avatar') avatar: ElementRef;
 
   constructor(
     private userService: UserService,
@@ -20,13 +21,15 @@ export class ProfileComponent implements OnInit {
     private router: Router) { }
 
   async ngOnInit() {
-    this.getUsername();
+    this.getUser();
   }
 
-  private getUsername = async () => {
-    const routeSnapshot = this.route.snapshot;
+  private async getUser() {
+    let userId = this.route.snapshot.queryParams.id;
 
-    if (!routeSnapshot.queryParams.id) {
+    // If no user id in the query params,
+    // then the user is viewing their own profile
+    if (!userId) {
       // No id and not logged in, cannot load a profile
       if (!this.authService.isLoggedIn()) {
         this.router.navigate(['/auth/login']);
@@ -34,8 +37,9 @@ export class ProfileComponent implements OnInit {
       }
 
       this.username = this.authService.getUsername();
+      userId = this.authService.getUserId(); // Get the id for the avatar call
     } else {
-      const result = await this.userService.getUsername(routeSnapshot.queryParams.id);
+      const result = await this.userService.getUsername(userId);
 
       if (!result) {
         // TODO popup, invalid id
@@ -43,6 +47,19 @@ export class ProfileComponent implements OnInit {
       }
 
       this.username = result;
+    }
+
+    const avatarResult = await this.userService.getAvatar(userId);
+
+    if (!avatarResult) {
+      // TODO popup
+      console.error('Cannot get avatar of unauthenticated user');
+    } else if (avatarResult.error) {
+      // TODO popup
+      console.error(avatarResult.error);
+    } else {
+      (this.avatar.nativeElement as HTMLImageElement).src = `data:image/png;base64,${avatarResult.base64Img}`;
+      // this.isLoadingAvatar = false;
     }
   }
 }

@@ -1,3 +1,7 @@
+.hidden {
+  display: none;
+}
+
 mat-spinner {
   margin: auto;
   margin-top: 10%;
@@ -27,8 +31,21 @@ mat-spinner {
       }
     }
 
-    #avatar > p {
-      text-align: center;
+    #avatar {
+      & > p {
+        text-align: center;
+      }
+
+      mat-spinner {
+        margin: 0 0 16px 0;
+      }
+
+      #center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
     }
   }
 

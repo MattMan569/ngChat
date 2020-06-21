@@ -11,7 +11,9 @@ import { AuthService } from '../services/auth.service';
 })
 export class ProfileComponent implements OnInit {
   isLoading = false;
+  isLoadingAvatar = true;
   username: string;
+  avatarSpinnerDiameter: number;
   @ViewChild('avatar') avatar: ElementRef;
 
   constructor(
@@ -25,6 +27,7 @@ export class ProfileComponent implements OnInit {
   }
 
   private async getUser() {
+    this.isLoadingAvatar = true;
     let userId = this.route.snapshot.queryParams.id;
 
     // If no user id in the query params,
@@ -59,7 +62,7 @@ export class ProfileComponent implements OnInit {
       console.error(avatarResult.error);
     } else {
       (this.avatar.nativeElement as HTMLImageElement).src = `data:image/png;base64,${avatarResult.base64Img}`;
-      // this.isLoadingAvatar = false;
+      this.isLoadingAvatar = false;
     }
   }
 }

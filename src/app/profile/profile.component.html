@@ -3,12 +3,15 @@
 <div id="container">
   <div id="user">
     <mat-card id="avatar">
-      <!-- TODO avatar -->
-      <img
-        src="https://material.io/resources/icons/static/ic_icons_192px_light.svg"
-        alt="Avatar"
-        #avatar
-      />
+      <div id="center">
+        <mat-spinner [diameter]="100" *ngIf="isLoadingAvatar"></mat-spinner>
+        <img
+          src=""
+          alt="Avatar"
+          [ngClass]="{ 'hidden': isLoadingAvatar }"
+          #avatar
+        />
+      </div>
       <mat-divider></mat-divider>
       <p>{{ username }}</p>
     </mat-card>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Subject, Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
@@ -11,6 +12,7 @@ const SERVER_URL = `${environment.apiUrl}/user`;
 })
 export class UserService {
   private base64Avatar: string;
+  private avatarUpdated = new Subject<null>();
 
   constructor(private authService: AuthService, private http: HttpClient) { }
 
@@ -33,6 +35,7 @@ export class UserService {
         .subscribe((base64Img: string) => {
           this.base64Avatar = base64Img;
           resolve({ base64Img });
+          this.avatarUpdated.next();
         }, (error: HttpErrorResponse) => {
           resolve({ error: error.error });
         });
@@ -72,6 +75,14 @@ export class UserService {
           resolve({ error: error.error });
         });
     });
+  }
+
+  /**
+   * Get an observable that will update
+   * the user's avatar has been updated
+   */
+  getAvatarUpdated(): Observable<null> {
+    return this.avatarUpdated.asObservable();
   }
 
   /**

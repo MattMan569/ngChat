@@ -21,11 +21,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.isAuthenticated = authStatus;
     });
 
-    this.userService.getAvatar().then((avatar) => {
-      if (avatar) {
-        this.avatar = `data:image/png;base64,${avatar.base64Img}`;
-      }
-    });
+    this.userService.getAvatarUpdated().subscribe(() => this.getAvatar());
+    this.getAvatar();
   }
 
   onLogout() {
@@ -34,5 +31,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.authSub.unsubscribe();
+  }
+
+  private getAvatar() {
+    this.userService.getAvatar().then((avatar) => {
+      if (avatar) {
+        this.avatar = `data:image/png;base64,${avatar.base64Img}`;
+      }
+    });
   }
 }

@@ -31,7 +31,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
   }
 
   onSaveBio() {
-
+    // TODO bio
   }
 
   async onAvatarChange(event: Event) {

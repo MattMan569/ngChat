@@ -4,9 +4,11 @@
     <mat-card-content>
       <mat-nav-list>
         <cdk-virtual-scroll-viewport [itemSize]="48">
-          <a mat-list-item href="#" *cdkVirtualFor="let user of users">
-            {{ user.user.username }}
-          </a>
+          <div *cdkVirtualFor="let user of users">
+            <a mat-list-item href="profile?id={{ user.user._id }}">
+              {{ user.user.username }}
+            </a>
+          </div>
         </cdk-virtual-scroll-viewport>
       </mat-nav-list>
     </mat-card-content>

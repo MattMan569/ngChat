@@ -16,13 +16,10 @@ export const createUser = async (req: Request, res: Response) => {
     const signupData = req.body as ISignupData;
     const password = await bcrypt.hash(signupData.password, 12);
 
-    // TODO file upload
-
     const user = await User.create({
       username: signupData.username,
       email: signupData.email,
       password,
-      // TODO avatarPath
     });
 
     res.status(201).json(user);

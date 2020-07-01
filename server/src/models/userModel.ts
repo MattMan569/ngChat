@@ -39,11 +39,6 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minlength: 8,
   },
-  avatarPath: {
-    type: String,
-    // TODO avatar
-    // required: true,
-  },
 }, {
   timestamps: true,
 });

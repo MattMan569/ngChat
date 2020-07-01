@@ -80,6 +80,7 @@ export const loginUser = async (req: Request, res: Response) => {
     res.cookie('jwt_refresh', refreshToken, {
       httpOnly: true,
       signed: true,
+      sameSite: 'lax',
     });
 
     res.json(response);

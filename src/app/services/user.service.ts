@@ -103,4 +103,26 @@ export class UserService {
         });
     });
   }
+
+  /**
+   * Get the username and bio for a user id.
+   * Returns the info on success, false otherwise.
+   */
+  async getUser(userId: string): Promise<false | { username: string, bio: string }> {
+    return new Promise((resolve) => {
+      if (!userId) {
+        resolve(false);
+      }
+
+      this.http.get<{ username: string, bio: string }>(`${SERVER_URL}/${userId}`)
+        .subscribe((data) => {
+          resolve({
+            username: data.username,
+            bio: data.bio,
+          });
+        }, () => {
+          resolve(false);
+        });
+    });
+  }
 }

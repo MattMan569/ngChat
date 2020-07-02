@@ -39,6 +39,9 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minlength: 8,
   },
+  bio: {
+    type: String,
+  },
 }, {
   timestamps: true,
 });

@@ -3,7 +3,7 @@ export interface IUser {
   username: string;
   email: string;
   password: string;
-  avatarPath: string;
+  bio: string;
 }
 
 export default IUser;

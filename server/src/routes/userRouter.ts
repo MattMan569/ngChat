@@ -14,9 +14,13 @@ router.post('/delete', isAuthorized, userControllers.deleteUser);
 
 router.post('/token', userControllers.newAccessToken);
 
+router.post('/bio', userControllers.changeBio);
+
 router.post('/avatar', isAuthorized, multer().single('avatar'), userControllers.changeAvatar);
 
 router.get('/avatar/:id', userControllers.getAvatar);
+
+router.get('/username/:id', userControllers.getUsername);
 
 router.get('/:id', userControllers.getUser);
 

@@ -141,6 +141,27 @@ export const newAccessToken = async (req: Request, res: Response) => {
   res.json({ accessToken, expires: expires() });
 };
 
+export const changeBio = async (req: Request, res: Response) => {
+  try {
+    // const user = await User.findById(req.session?._id);
+    const user = await User.findOneAndUpdate({
+      _id: req.session?._id,
+    }, req.body, {
+      new: true,
+    });
+
+    if (!user) {
+      res.status(400).json();
+      return;
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json();
+  }
+};
+
 export const changeAvatar = async (req: Request, res: Response) => {
   if (!process.env.S3_BUCKET_NAME) {
     throw new Error('Environment variable S3_BUCKET_NAME is undefined');
@@ -200,10 +221,35 @@ export const getAvatar = async (req: Request, res: Response) => {
   }
 };
 
+export const getUsername = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      res.status(404).json();
+      return;
+    }
+
+    res.json(user?.username);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json();
+  }
+};
+
 export const getUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.params.id);
-    res.json(user?.username);
+
+    if (!user) {
+      res.status(404).json();
+      return;
+    }
+
+    res.json({
+      username: user.username,
+      bio: user.bio,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json();
@@ -215,7 +261,9 @@ export default {
   loginUser,
   deleteUser,
   newAccessToken,
+  changeBio,
   changeAvatar,
   getAvatar,
+  getUsername,
   getUser,
 };

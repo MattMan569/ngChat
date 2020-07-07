@@ -78,6 +78,7 @@ export const loginUser = async (req: Request, res: Response) => {
       httpOnly: true,
       signed: true,
       sameSite: 'lax',
+      expires: new Date(9999, 0, 1),
     });
 
     res.json(response);

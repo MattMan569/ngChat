@@ -144,10 +144,11 @@ export const newAccessToken = async (req: Request, res: Response) => {
 
 export const changeBio = async (req: Request, res: Response) => {
   try {
-    // const user = await User.findById(req.session?._id);
     const user = await User.findOneAndUpdate({
       _id: req.session?._id,
-    }, req.body, {
+    }, {
+      bio: req.body.bio,
+    }, {
       new: true,
     });
 

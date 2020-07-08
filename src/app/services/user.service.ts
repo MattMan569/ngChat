@@ -43,6 +43,24 @@ export class UserService {
   }
 
   /**
+   * Updates the user's bio.
+   * Returns true on success, false otherwise.
+   */
+  async updateBio(bio: string): Promise<boolean> {
+    console.log('bio:', bio);
+    return new Promise((resolve) => {
+      this.http.post(`${SERVER_URL}/bio`, { bio })
+        .subscribe(() => {
+          console.log('success');
+          resolve(true);
+        }, (error: HttpErrorResponse) => {
+          console.error(error);
+          resolve(false);
+        });
+    });
+  }
+
+  /**
    * Get the avatar of the specified user.
    * If no user is specified, uses the currently logged in user instead
    * and will return false if the user is not currently logged in.

@@ -47,11 +47,9 @@ export class UserService {
    * Returns true on success, false otherwise.
    */
   async updateBio(bio: string): Promise<boolean> {
-    console.log('bio:', bio);
     return new Promise((resolve) => {
       this.http.post(`${SERVER_URL}/bio`, { bio })
         .subscribe(() => {
-          console.log('success');
           resolve(true);
         }, (error: HttpErrorResponse) => {
           console.error(error);

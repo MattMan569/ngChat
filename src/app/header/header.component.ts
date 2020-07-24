@@ -37,6 +37,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.userService.getAvatar().then((avatar) => {
       if (avatar) {
         this.avatar = `data:image/png;base64,${avatar.base64Img}`;
+      } else {
+        console.error('cannot get avatar');
       }
     });
   }

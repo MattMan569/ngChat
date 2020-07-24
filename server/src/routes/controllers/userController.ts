@@ -211,23 +211,22 @@ export const getAvatar = async (req: Request, res: Response) => {
   if (!process.env.S3_BUCKET_NAME) {
     throw new Error('Environment variable S3_BUCKET_NAME is undefined');
   }
-
-  try {
-    s3.getObject({
-      Bucket: process.env.S3_BUCKET_NAME,
-      Key: `avatar/${req.params.id}`,
-    }, (error, data) => {
-      if (error) {
-        console.error('AWS S3 GET error', error);
-        res.status(500).json();
-      } else {
-        res.json(data.Body?.toString('base64'));
+  s3.getObject({
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key: `avatar/${req.params.id}`,
+  }, (error, data) => {
+    if (error) {
+      if (error.statusCode === 404) {
+        res.status(404).json(error.message);
+        return;
       }
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json();
-  }
+
+      console.error('AWS S3 GET error', error);
+      res.status(500).json();
+    } else {
+      res.json(data.Body?.toString('base64'));
+    }
+  });
 };
 
 export const getUsername = async (req: Request, res: Response) => {

@@ -109,6 +109,7 @@ export const newAccessToken = async (req: Request, res: Response) => {
   // No token has been provided
   if (!refreshToken) {
     res.status(401).json();
+    return;
   }
 
   const auth = await Auth.findOne({
@@ -118,6 +119,7 @@ export const newAccessToken = async (req: Request, res: Response) => {
   // The provided refresh token is not currently authorized
   if (!auth) {
     res.status(403).json();
+    return;
   }
 
   const userId = jwtUtil.decodeRefreshToken(refreshToken);

@@ -157,6 +157,9 @@ export class AuthService {
       this.authData.expires = response.expires;
       this.saveAuthData();
       this.setRefreshTimer();
+    }, (error) => {
+      console.error('could not refresh token');
+      console.error(error);
     });
 
     return httpOb;

@@ -104,9 +104,6 @@ export const deleteUser = async (req: Request, res: Response) => {
 };
 
 export const newAccessToken = async (req: Request, res: Response) => {
-  // TODO give new refresh token
-  // send logic to new function or db static
-
   const refreshToken = req.signedCookies.jwt_refresh;
 
   // No token has been provided
@@ -138,6 +135,16 @@ export const newAccessToken = async (req: Request, res: Response) => {
   }
 
   const accessToken = jwtUtil.encodeAccessToken(user.username, user.email, user._id);
+  const newRefreshToken = jwtUtil.encodeRefreshToken(user._id);
+
+  await Auth.authorizeUser(user._id, refreshToken);
+
+  res.cookie('jwt_refresh', newRefreshToken, {
+    httpOnly: true,
+    signed: true,
+    sameSite: 'lax',
+    expires: new Date(9999, 0, 1),
+  });
 
   res.json({ accessToken, expires: expires() });
 };

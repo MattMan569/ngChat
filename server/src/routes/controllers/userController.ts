@@ -209,12 +209,22 @@ export const getAvatar = async (req: Request, res: Response) => {
   }, (error, data) => {
     if (error) {
       if (error.statusCode === 404) {
-        res.status(404).json(error.message);
-        return;
-      }
-
+        // User has not uploaded their own profile picture, use the default one
+        s3.getObject({
+          Bucket: process.env.S3_BUCKET_NAME as string,
+          Key: `avatar/default`,
+        }, (error2, data2) => {
+          if (error2) {
+            console.error('AWS S3 GET error', error2);
+            res.status(500).json();
+          } else {
+            res.json(data2.Body?.toString('base64'));
+          }
+        });
+      } else {
       console.error('AWS S3 GET error', error);
       res.status(500).json();
+      }
     } else {
       res.json(data.Body?.toString('base64'));
     }

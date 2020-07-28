@@ -12,8 +12,6 @@ export class SettingsComponent implements OnInit, AfterViewInit {
   isLoading = false;
   isLoadingAvatar = false;
   avatarSpinnerDiameter: number;
-  // TODO true if current value is different from initial fetched from server
-  // set after content from server has been fetched
   disableBioSave = true;
   bio: string;
   @ViewChild('avatar') avatar: ElementRef;
@@ -40,7 +38,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
 
   onSaveBio() {
     const bioText = (this.bioInput.nativeElement as HTMLTextAreaElement).value;
-    this.userService.updateBio(bioText);
+    this.userService.updateBio(bioText); // TODO popup on success or error
   }
 
   async onAvatarChange(event: Event) {

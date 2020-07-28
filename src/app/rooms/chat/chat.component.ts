@@ -17,6 +17,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
   form: FormGroup;
   messages: IMessage[] = [];
   users: Array<{ socketId: string; user: IUser; }>;
+  itemSize = 100;
   private messagesSub: Subscription;
   private usersSub: Subscription;
   @ViewChild('messageViewport') messageViewport: CdkVirtualScrollViewport;

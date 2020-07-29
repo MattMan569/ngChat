@@ -35,10 +35,6 @@ import { ConfirmComponent } from './dialogs/confirm/confirm.component';
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
     multi: true,
-  }, {
-    provide: HTTP_INTERCEPTORS,
-    useClass: ErrorInterceptor,
-    multi: true,
   }],
   bootstrap: [AppComponent],
 })

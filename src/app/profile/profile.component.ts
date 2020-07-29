@@ -43,16 +43,6 @@ export class ProfileComponent implements OnInit {
       // this.username = this.authService.getUsername();
       userId = this.authService.getUserId(); // Get the id for the avatar call
     }
-    // } else {
-    //   const result = await this.userService.getUsername(userId);
-
-    //   if (!result) {
-    //     // TODO popup, invalid id
-    //     return console.error('invalid id');
-    //   }
-
-    //   this.username = result;
-    // }
 
     const result = await this.userService.getUser(userId);
 

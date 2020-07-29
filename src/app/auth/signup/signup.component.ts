@@ -80,7 +80,6 @@ export class SignupComponent implements OnInit, AfterViewInit {
       this.form.value.username,
       this.form.value.email,
       this.form.value.password,
-      // TODO avatar
     );
 
     this.isLoading = false;

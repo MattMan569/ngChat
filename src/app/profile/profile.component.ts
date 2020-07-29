@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
+import { InfoComponent } from '../dialogs/info/info.component';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
 
@@ -21,7 +23,8 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private dialog: MatDialog) { }
 
   async ngOnInit() {
     this.getUser();
@@ -47,8 +50,7 @@ export class ProfileComponent implements OnInit {
     const result = await this.userService.getUser(userId);
 
     if (!result) {
-      // TODO popup, invalid id
-      return console.error('invalid id');
+      return this.openDialog('Invalid user ID');
     }
 
     this.username = result.username;
@@ -57,14 +59,28 @@ export class ProfileComponent implements OnInit {
     const avatarResult = await this.userService.getAvatar(userId);
 
     if (!avatarResult) {
-      // TODO popup
-      console.error('Cannot get avatar of unauthenticated user');
+      this.openDialog('Cannot get avatar of unauthenticated user');
     } else if (avatarResult.error) {
-      // TODO popup
-      console.error(avatarResult.error);
+      this.openDialog(avatarResult.error);
     } else {
       (this.avatar.nativeElement as HTMLImageElement).src = `data:image/png;base64,${avatarResult.base64Img}`;
       this.isLoadingAvatar = false;
     }
+  }
+
+  /**
+   * Create a dialog
+   */
+  private openDialog = (message: string, durationMs: number = 3000) => {
+    const dialogRef = this.dialog.open(InfoComponent, {
+      data: message,
+      hasBackdrop: false,
+      panelClass: 'custom-dialog',
+      position: { top: '2rem' },
+    });
+
+    setTimeout(() => {
+      dialogRef.close();
+    }, durationMs);
   }
 }

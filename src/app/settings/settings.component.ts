@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
+import { InfoComponent } from '../dialogs/info/info.component';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
 
@@ -19,7 +21,11 @@ export class SettingsComponent implements OnInit, AfterViewInit {
   @ViewChild('spinnerDiv') spinnerDiv: ElementRef;
   @ViewChild('bioInput') bioInput: ElementRef;
 
-  constructor(private userService: UserService, private authService: AuthService, private cdRef: ChangeDetectorRef) { }
+  constructor(
+    private userService: UserService,
+    private authService: AuthService,
+    private cdRef: ChangeDetectorRef,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.fetchAvatar();
@@ -36,9 +42,15 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     this.disableBioSave = this.bio !== bioText ? false : true;
   }
 
-  onSaveBio() {
+  async onSaveBio() {
     const bioText = (this.bioInput.nativeElement as HTMLTextAreaElement).value;
-    this.userService.updateBio(bioText); // TODO popup on success or error
+    const success =  await this.userService.updateBio(bioText);
+
+    if (success) {
+      this.openDialog('Your bio has been successfully updated');
+    } else {
+      this.openDialog('Could not update bio');
+    }
   }
 
   async onAvatarChange(event: Event) {
@@ -49,7 +61,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
       this.isLoadingAvatar = false;
 
       if (result.error) {
-        // TODO popup
+        this.openDialog('Could not upload new avatar');
         console.error(result.error);
       } else {
         (this.avatar.nativeElement as HTMLImageElement).src = `data:image/png;base64,${result.base64Img}`;
@@ -62,10 +74,10 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     const result = await this.userService.getAvatar(this.authService.getUserId());
 
     if (!result) {
-      // TODO popup
+      this.openDialog('Could not get user avatar');
       console.error('Cannot get avatar of unauthenticated user');
     } else if (result.error) {
-      // TODO popup
+      this.openDialog(result.error);
       console.error(result.error);
     } else {
       (this.avatar.nativeElement as HTMLImageElement).src = `data:image/png;base64,${result.base64Img}`;
@@ -83,5 +95,21 @@ export class SettingsComponent implements OnInit, AfterViewInit {
 
     // Ensure the bio is not undefined for proper equality checking
     this.bio = user.bio || '';
+  }
+
+  /**
+   * Create a dialog
+   */
+  private openDialog = (message: string, durationMs: number = 3000) => {
+    const dialogRef = this.dialog.open(InfoComponent, {
+      data: message,
+      hasBackdrop: false,
+      panelClass: 'custom-dialog',
+      position: { top: '2rem' },
+    });
+
+    setTimeout(() => {
+      dialogRef.close();
+    }, durationMs);
   }
 }

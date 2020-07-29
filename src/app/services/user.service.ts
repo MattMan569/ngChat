@@ -11,7 +11,7 @@ const SERVER_URL = `${environment.apiUrl}/user`;
   providedIn: 'root',
 })
 export class UserService {
-  private base64Avatar: string;
+  private base64Avatar: string; // TODO clear on logout to prevent wrong avatar when logging in as a different user
   private avatarUpdated = new Subject<null>();
 
   constructor(private authService: AuthService, private http: HttpClient) { }

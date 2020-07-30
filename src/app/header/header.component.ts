@@ -19,13 +19,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authSub = this.authService.getAuthStatus().subscribe((authStatus) => {
       this.isAuthenticated = authStatus;
+      this.userService.getAvatarUpdated().subscribe(() => this.getAvatar());
+      this.getAvatar();
     });
 
-    this.userService.getAvatarUpdated().subscribe(() => this.getAvatar());
-    this.getAvatar();
   }
 
   onLogout() {
+    this.userService.clearAvatar();
+    this.avatar = null;
     this.authService.logout();
   }
 

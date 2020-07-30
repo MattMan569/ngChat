@@ -94,6 +94,13 @@ export class UserService {
   }
 
   /**
+   * Clear the client-side stored avatar
+   */
+  clearAvatar() {
+    this.base64Avatar = null;
+  }
+
+  /**
    * Get an observable that will update
    * the user's avatar has been updated
    */

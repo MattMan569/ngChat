@@ -47,7 +47,6 @@ export class RoomService {
     });
   }
 
-  // TODO handle room update errors on server
   /**
    * Update an existing room.
    * On success the observalbe resolves to true.

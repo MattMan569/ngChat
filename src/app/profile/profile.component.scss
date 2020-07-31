@@ -20,6 +20,10 @@ mat-spinner {
   #user {
     flex-grow: 1;
 
+    li {
+      max-width: 240px;
+    }
+
     mat-card {
       &:first-of-type, img {
         margin-bottom: 1rem;

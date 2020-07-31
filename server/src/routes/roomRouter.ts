@@ -17,6 +17,8 @@ router.get('/', roomControllers.getRooms);
 
 router.get('/:id', roomControllers.getRoom);
 
+router.get('/owned/:id', roomControllers.getOwnedRooms);
+
 router.delete('/:id', isAuthorized, roomControllers.deleteRoom);
 
 export default router;

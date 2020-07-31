@@ -82,6 +82,16 @@ export const getRoom = async (req: Request, res: Response) => {
   }
 };
 
+export const getOwnedRooms = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    const rooms = await Room.find({ owner: userId });
+    res.json(rooms);
+  } catch (error) {
+    res.status(500).json();
+  }
+};
+
 export const joinRoom = async (req: Request, res: Response) => {
   try {
     const room = await Room.findById(req.params.id);
@@ -158,6 +168,7 @@ export default {
   updateRoom,
   getRooms,
   getRoom,
+  getOwnedRooms,
   joinRoom,
   search,
   deleteRoom,

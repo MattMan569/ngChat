@@ -8,7 +8,7 @@
         <img
           src=""
           alt="Avatar"
-          [ngClass]="{ 'hidden': isLoadingAvatar }"
+          [ngClass]="{ hidden: isLoadingAvatar }"
           #avatar
         />
       </div>
@@ -16,17 +16,16 @@
       <p>{{ username }}</p>
     </mat-card>
 
-    <!-- TODO list of owned rooms -->
     <mat-card>
       <!-- if does not own any rooms -->
-      <p>Not the owner of any rooms</p>
+      <p *ngIf="rooms.length < 1">Not the owner of any rooms</p>
       <!-- else -->
-      <p>Owner of these rooms:</p>
-      <ul>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-      </ul>
+      <div *ngIf="rooms.length >= 1">
+        <p>Owner of these rooms:</p>
+        <ul>
+          <li *ngFor="let room of rooms">{{ room.name }}</li>
+        </ul>
+      </div>
     </mat-card>
   </div>
 

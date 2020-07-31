@@ -104,6 +104,13 @@ export class RoomService {
   }
 
   /**
+   * Get all rooms owned by the specified user
+   */
+  getOwnedRooms(id: string) {
+    return this.http.get<IRoom[]>(`${SERVER_URL}/owned/${id}`);
+  }
+
+  /**
    * Join a locked room
    */
   joinRoom(roomId: string, password: string) {

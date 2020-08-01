@@ -18,9 +18,9 @@
 
     <mat-card>
       <!-- if does not own any rooms -->
-      <p *ngIf="rooms.length < 1">Not the owner of any rooms</p>
+      <p *ngIf="rooms && rooms.length < 1">Not the owner of any rooms</p>
       <!-- else -->
-      <div *ngIf="rooms.length >= 1">
+      <div *ngIf="rooms && rooms.length >= 1">
         <p>Owner of these rooms:</p>
         <ul>
           <li *ngFor="let room of rooms">{{ room.name }}</li>

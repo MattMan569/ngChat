@@ -33,44 +33,48 @@ export class ProfileComponent implements OnInit {
 
   async ngOnInit() {
     this.getUser();
-    this.getRooms();
   }
 
   private async getUser() {
-    this.isLoadingAvatar = true;
-    this.userId = this.route.snapshot.queryParams.id;
+    this.route.queryParams.subscribe(async (params) => {
+      this.isLoadingAvatar = true;
+      this.userId = params.id;
 
-    // If no user id in the query params,
-    // then the user is viewing their own profile
-    if (!this.userId) {
-      // No id and not logged in, cannot load a profile
-      if (!this.authService.isLoggedIn()) {
-        this.router.navigate(['/auth/login']);
-        return;
+      // If no user id in the query params,
+      // then the user is viewing their own profile
+      if (!this.userId) {
+        // No id and not logged in, cannot load a profile
+        if (!this.authService.isLoggedIn()) {
+          this.router.navigate(['/auth/login']);
+          return;
+        }
+
+        this.userId = this.authService.getUserId(); // Get the id for the avatar call
       }
 
-      this.userId = this.authService.getUserId(); // Get the id for the avatar call
-    }
+      // Get this user's owner rooms
+      this.getRooms();
 
-    const result = await this.userService.getUser(this.userId);
+      const result = await this.userService.getUser(this.userId);
 
-    if (!result) {
-      return this.openDialog('Invalid user ID');
-    }
+      if (!result) {
+        return this.openDialog('Invalid user ID');
+      }
 
-    this.username = result.username;
-    this.bio = result.bio;
+      this.username = result.username;
+      this.bio = result.bio;
 
-    const avatarResult = await this.userService.getAvatar(this.userId);
+      const avatarResult = await this.userService.getAvatar(this.userId);
 
-    if (!avatarResult) {
-      this.openDialog('Cannot get avatar of unauthenticated user');
-    } else if (avatarResult.error) {
-      this.openDialog(avatarResult.error);
-    } else {
-      (this.avatar.nativeElement as HTMLImageElement).src = `data:image/png;base64,${avatarResult.base64Img}`;
-      this.isLoadingAvatar = false;
-    }
+      if (!avatarResult) {
+        this.openDialog('Cannot get avatar of unauthenticated user');
+      } else if (avatarResult.error) {
+        this.openDialog(avatarResult.error);
+      } else {
+        (this.avatar.nativeElement as HTMLImageElement).src = `data:image/png;base64,${avatarResult.base64Img}`;
+        this.isLoadingAvatar = false;
+      }
+    });
   }
 
   private async getRooms() {

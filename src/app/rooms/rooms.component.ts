@@ -47,8 +47,6 @@ export class RoomsComponent implements OnInit, OnDestroy {
   async onSearch() {
     this.search = (this.input.nativeElement as HTMLInputElement).value;
 
-    // TODO search mode based on if search el has focus
-
     // Empty search by user deletion
     // Repopulate rooms by default get-all
     if (!this.search) {

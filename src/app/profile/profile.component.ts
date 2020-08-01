@@ -77,7 +77,6 @@ export class ProfileComponent implements OnInit {
     this.roomService.getOwnedRooms(this.userId)
       .subscribe((rooms) => {
         this.rooms = rooms;
-        console.log(this.rooms);
       });
   }
 

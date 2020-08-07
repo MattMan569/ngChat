@@ -1,14 +1,13 @@
+var path = require("path");
 var express = require("express");
 
 var app = express();
 
-var distDir = __dirname + "/dist";
-app.use(express.static(distDir));
+// var distDir = path.resolve(__dirname, "/dist");
+app.use(express.static(__dirname + "/dist/ngChat"));
 
 app.get("/*", (req, res) => {
-  res.sendFile("index.html", {
-    root: "dist/ngChat",
-  });
+  res.sendFile(path.join(__dirname + "/dist/ngChat/index.html"));
 });
 
 var server = app.listen(process.env.PORT || 8080, () => {

@@ -1,6 +1,9 @@
 {
   "name": "ng-chat",
   "version": "0.0.0",
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "serve": "npm-run-all --parallel start:*",
     "ng": "ng",

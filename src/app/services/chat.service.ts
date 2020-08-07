@@ -11,7 +11,8 @@ import IMessage from 'types/message';
   providedIn: 'root',
 })
 export class ChatService {
-  private socket: SocketIOClient.Socket;
+  // private socket: SocketIOClient.Socket;
+  private socket: any;
   private messages: IMessage[] = [];
   private messagesOb = new Subject<IMessage[]>();
   private users: Array<{ socketId: string, user: IUser}>;

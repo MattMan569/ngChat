@@ -16,7 +16,9 @@
     "e2e": "ng e2e",
     "heroku-postbuild": "ng build --aot --prod"
   },
-  "private": true,
+  "author": "Matthew Polsom",
+  "license": "UNLICENSED",
+  "private": "true",
   "dependencies": {
     "@angular/cli": "~9.1.0",
     "@angular/compiler-cli": "~9.1.0",

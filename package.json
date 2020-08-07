@@ -11,6 +11,7 @@
     "start:app": "ng serve",
     "start:prod": "node server.js",
     "start:server": "npm run --prefix ./server serve",
+    "start:server:prod": "npm run --prefix ./server start",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

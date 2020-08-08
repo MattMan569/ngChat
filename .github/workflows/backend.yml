@@ -26,7 +26,7 @@ jobs:
         run: |
           git config user.email "matthewpolsom@hotmail.com"
           git config user.name  "MattMan569"
-          git mv -k ./server/* ./.
+          git mv -f ./server/* ./.
           git add *
           git commit -m 'mv'
       - name: Deploy to heroku

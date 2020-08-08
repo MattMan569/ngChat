@@ -12,8 +12,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout the repository
+      - uses: actions/checkout@v2
       - name: Add heroku remote for backend
-        uses: actions/checkout@v2
         run: git remote add heroku-backend https://heroku:${{ secrets.HEROKU_API_TOKEN }}@git.heroku.com/${{ secrets.HEROKU_BACKEND_NAME }}.git
       - name: Copy types folder
         uses: MadaraUchiha/copy-action@0.0.1

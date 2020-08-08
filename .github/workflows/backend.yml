@@ -22,9 +22,9 @@ jobs:
       #   run: git filter-branch --prune-empty --subdirectory-filter 'git rm'
         run: git filter-branch --index-filter 'git rm --cached -qr --ignore-unmatch -- . && git reset -q $GIT_COMMIT -- server/ types/' --prune-empty -- --all
       - name: Move
+          # git rm -r server
         run: |
           git mv -k ./server/* ./.
-          git rm -r server/
           git add *
           git commit -m 'mv'
       - name: Deploy to heroku

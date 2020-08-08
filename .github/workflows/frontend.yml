@@ -15,6 +15,14 @@ jobs:
       - uses: actions/checkout@v2
       - name: Add heroku remote for frontend
         run: git remote add heroku-frontend https://heroku:${{ secrets.HEROKU_API_TOKEN }}@git.heroku.com/${{ secrets.HEROKU_FRONTEND_NAME }}.git
+      - name: Remove server files
+        run: |
+          git config user.email "matthewpolsom@hotmail.com"
+          git config user.name  "MattMan569"
+          git rm -rf ./server/
+          git add *
+          git commit -m 'rm'
       - name: Deploy frontend to heroku
         # run: git push heroku-frontend `git subtree split --prefix src master`:refs/heads/master --force
-        run: git push heroku-frontend `git rm -rf server/`:refs/heads/master --force
+        # run: git push heroku-frontend `git rm -rf server/`:refs/heads/master --force
+        run: git push heroku-frontend master --force

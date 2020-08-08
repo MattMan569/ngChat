@@ -24,6 +24,8 @@ jobs:
       - name: Move
           # git rm -r server
         run: |
+          git config user.email "matthewpolsom@hotmail.com"
+          git config user.name  "MattMan569"
           git mv -k ./server/* ./.
           git add *
           git commit -m 'mv'

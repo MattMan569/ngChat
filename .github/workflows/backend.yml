@@ -24,5 +24,6 @@ jobs:
         run: |
           cp -a server/. .
           rm -r server
+        working-directory: .
       - name: Deploy to heroku
         run: git push heroku-backend master --force

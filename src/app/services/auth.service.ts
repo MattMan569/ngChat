@@ -16,6 +16,7 @@ const SERVER_URL = `${environment.apiUrl}/user`;
 })
 export class AuthService {
   private accessToken: string;
+  private refreshToken: string;
   private authData: ITokenPayload;
   private authStatus = new BehaviorSubject<boolean>(false);
   private refreshTimer: ReturnType<typeof setTimeout>;
@@ -105,6 +106,7 @@ export class AuthService {
         .subscribe((response) => {
           resolve();
           this.accessToken = response.accessToken;
+          this.refreshToken = response.refreshToken;
           this.authData = response.payload;
           this.authStatus.next(true);
           this.saveAuthData();
@@ -122,6 +124,7 @@ export class AuthService {
    */
   logout() {
     this.accessToken = null;
+    this.refreshToken = null;
     this.authData = null;
     this.authStatus.next(false);
     this.router.navigate(['/auth/login']);
@@ -141,6 +144,7 @@ export class AuthService {
     }
 
     this.accessToken = authData.accessToken;
+    this.refreshToken = authData.refreshToken;
     this.authData = authData.payload;
     this.authStatus.next(true);
     this.setRefreshTimer();
@@ -150,7 +154,7 @@ export class AuthService {
    * Get a new access token from the server.
    */
   refreshAccessToken() {
-    const httpOb = this.http.post<{ accessToken: string, expires: string }>(`${SERVER_URL}/token`, null, { withCredentials: true });
+    const httpOb = this.http.post<{ accessToken: string, expires: string }>(`${SERVER_URL}/token`, { jwt_refresh: this.refreshToken });
 
     httpOb.subscribe((response) => {
       this.accessToken = response.accessToken;
@@ -170,6 +174,7 @@ export class AuthService {
    */
   private saveAuthData() {
     localStorage.setItem('accessToken', this.accessToken);
+    localStorage.setItem('refreshToken', this.refreshToken);
     localStorage.setItem('username', this.authData.username);
     localStorage.setItem('email', this.authData.email);
     localStorage.setItem('_id', this.authData._id);
@@ -181,13 +186,14 @@ export class AuthService {
    */
   private getAuthData(): ILoginResponse {
     const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
     const username = localStorage.getItem('username');
     const email = localStorage.getItem('email');
     const id = localStorage.getItem('_id');
     const expires = localStorage.getItem('expires');
 
     // Ensure all values were retrieved
-    if (!accessToken || !username || !email || !id || !expires) {
+    if (!accessToken || !refreshToken || !username || !email || !id || !expires) {
       return;
     }
 
@@ -200,6 +206,7 @@ export class AuthService {
 
     return {
       accessToken,
+      refreshToken,
       payload,
     };
   }
@@ -209,6 +216,7 @@ export class AuthService {
    */
   private clearAuthData() {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('username');
     localStorage.removeItem('email');
     localStorage.removeItem('_id');

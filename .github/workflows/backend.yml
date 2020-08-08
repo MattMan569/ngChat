@@ -19,7 +19,13 @@ jobs:
       # - name: Deploy backend to heroku
       #  run: git push heroku-backend `git subtree split --prefix server master`:refs/heads/master --force
       - name: Filter for server and types files
-        run: git filter-branch --prune-empty --subdirectory-filter server/*
-      #   run: git filter-branch --index-filter 'git rm --cached -qr --ignore-unmatch -- . && git reset -q $GIT_COMMIT -- server/' --prune-empty -- --all
+      #   run: git filter-branch --prune-empty --subdirectory-filter 'git rm'
+        run: git filter-branch --index-filter 'git rm --cached -qr --ignore-unmatch -- . && git reset -q $GIT_COMMIT -- server/ types/' --prune-empty -- --all
+      - name: Move
+        run: |
+          git mv ./server/* ./.
+          git rm server/
+          git add *
+          git commit -m 'mv'
       - name: Deploy to heroku
         run: git push heroku-backend master --force

@@ -26,6 +26,7 @@ jobs:
         run: |
           git config user.email "matthewpolsom@hotmail.com"
           git config user.name  "MattMan569"
+          git mv types types2
           git mv -f ./server/* ./.
           git add *
           git commit -m 'mv'

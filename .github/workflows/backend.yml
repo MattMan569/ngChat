@@ -12,8 +12,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: Add heroku remote for backend
+        uses: actions/checkout@v2
         run: git remote add heroku-backend https://heroku:${{ secrets.HEROKU_API_TOKEN }}@git.heroku.com/${{ secrets.HEROKU_BACKEND_NAME }}.git
+      - name: Copy types folder
+        uses: MadaraUchiha/copy-action@0.0.1
+        with:
+          source: "types"
+          target: "types"
       - name: Deploy backend to heroku
         run: git push heroku-backend `git subtree split --prefix server master`:refs/heads/master --force

@@ -13,5 +13,3 @@ export class AppComponent implements OnInit {
     this.authService.autoAuthUser();
   }
 }
-
-// TODO github actions

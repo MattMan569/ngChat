@@ -75,13 +75,6 @@ export const loginUser = async (req: Request, res: Response) => {
       },
     };
 
-    res.cookie('jwt_refresh', refreshToken, {
-      httpOnly: true,
-      signed: true,
-      sameSite: 'lax',
-      expires: new Date(9999, 0, 1),
-    });
-
     res.json(response);
   } catch (error) {
     console.error(error);
@@ -104,9 +97,7 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-// TODO cleanup
 export const newAccessToken = async (req: Request, res: Response) => {
-  // const refreshToken = req.signedCookies.jwt_refresh;
   const refreshToken = req.body.jwt_refresh;
 
   // No token has been provided
@@ -124,9 +115,6 @@ export const newAccessToken = async (req: Request, res: Response) => {
     res.status(403).json();
     return;
   }
-
-  // TODO remove
-  console.log('new method works');
 
   const userId = jwtUtil.decodeRefreshToken(refreshToken);
 

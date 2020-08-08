@@ -19,7 +19,7 @@ jobs:
       - name: Copy types folder
         uses: MadaraUchiha/copy-action@0.0.1
         with:
-          source: "types"
+          source: "types/**"
           target: "types"
       - name: Deploy backend to heroku
         run: git push heroku-backend `git subtree split --prefix server master`:refs/heads/master --force

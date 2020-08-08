@@ -19,6 +19,7 @@ jobs:
         run: |
           git config user.email "matthewpolsom@hotmail.com"
           git config user.name  "MattMan569"
+          git fetch --unshallow
           git rm -rf ./server/
           git add *
           git commit -m 'rm'

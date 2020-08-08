@@ -77,6 +77,7 @@ export const loginUser = async (req: Request, res: Response) => {
     res.cookie('jwt_refresh', refreshToken, {
       httpOnly: true,
       signed: true,
+      secure: true,
       sameSite: 'lax',
       expires: new Date(9999, 0, 1),
     });

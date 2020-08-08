@@ -101,11 +101,14 @@ export class AuthService {
     // On success, set auth info and redirect to room listing
     // On failure, resolve the promise with the error message
     return new Promise<string>((resolve, reject) => {
-      this.http.post<ILoginResponse>(`${SERVER_URL}/login`, loginData, { withCredentials: true })
+      this.http.post<ILoginResponse>(`${SERVER_URL}/login`, loginData, { withCredentials: true, observe: 'response' })
         .subscribe((response) => {
+          // TODO observe body
+          console.log(response.headers);
+          console.log(response.headers.getAll('Authorization'));
           resolve();
-          this.accessToken = response.accessToken;
-          this.authData = response.payload;
+          this.accessToken = response.body.accessToken;
+          this.authData = response.body.payload;
           this.authStatus.next(true);
           this.saveAuthData();
           this.setRefreshTimer();

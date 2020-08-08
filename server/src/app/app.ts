@@ -10,7 +10,7 @@ import roomRouter from './../routes/roomRouter';
 export const app = express();
 
 // TODO check if CORS works
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors({ origin: /.*\.herokuapp\.com.*/, credentials: true }));
 app.use(express.json());
 app.use(session);
 app.use(cookieParser(process.env.COOKIE_PARSER_SECRET));

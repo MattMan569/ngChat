@@ -22,6 +22,7 @@ jobs:
       #   run: git filter-branch --index-filter 'git rm --cached -qr --ignore-unmatch -- . && git reset -q $GIT_COMMIT -- server/ types/' --prune-empty -- --all
       - name: Move
         run: |
+          rm -rv !("server/**")
           cp -a server/. .
           rm -r server
           git add .

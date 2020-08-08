@@ -18,15 +18,8 @@ jobs:
         run: git remote add heroku-backend https://heroku:${{ secrets.HEROKU_API_TOKEN }}@git.heroku.com/${{ secrets.HEROKU_BACKEND_NAME }}.git
       # - name: Deploy backend to heroku
       #  run: git push heroku-backend `git subtree split --prefix server master`:refs/heads/master --force
-      # - name: Filter for server and types files
-      #   run: git filter-branch --index-filter 'git rm --cached -qr --ignore-unmatch -- . && git reset -q $GIT_COMMIT -- server/ types/' --prune-empty -- --all
-      - name: Move
-        run: |
-          rm -rv !("server/**")
-          cp -a server/. .
-          rm -r server
-          git add .
-          git commit -m 'x'
-        working-directory: .
+      - name: Filter for server and types files
+        run: git filter-branch --prune-empty --subdirectory-filter server\** -- --all
+      #   run: git filter-branch --index-filter 'git rm --cached -qr --ignore-unmatch -- . && git reset -q $GIT_COMMIT -- server/' --prune-empty -- --all
       - name: Deploy to heroku
         run: git push heroku-backend master --force

@@ -66,6 +66,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const response: ILoginResponse = {
       accessToken,
+      refreshToken,
       payload: {
         username: user.username,
         email: user.email,

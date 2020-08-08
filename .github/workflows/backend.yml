@@ -23,7 +23,7 @@ jobs:
         run: git filter-branch --index-filter 'git rm --cached -qr --ignore-unmatch -- . && git reset -q $GIT_COMMIT -- server/ types/' --prune-empty -- --all
       - name: Move
         run: |
-          git mv ./server/* ./.
+          git mv -k ./server/* ./.
           git rm server/
           git add *
           git commit -m 'mv'

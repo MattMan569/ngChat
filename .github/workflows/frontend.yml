@@ -24,6 +24,4 @@ jobs:
           git add *
           git commit -m 'rm'
       - name: Deploy frontend to heroku
-        # run: git push heroku-frontend `git subtree split --prefix src master`:refs/heads/master --force
-        # run: git push heroku-frontend `git rm -rf server/`:refs/heads/master --force
         run: git push heroku-frontend master --force

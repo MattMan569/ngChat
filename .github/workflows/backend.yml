@@ -25,5 +25,7 @@ jobs:
           git mv ./server/* ./.
           git add *
           git commit -m 'mv'
+      - name: Login to heroku
+        run: heroku login
       - name: Deploy to heroku
         run: git push heroku-backend master --force

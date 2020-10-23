@@ -8,7 +8,7 @@ import roomRouter from './../routes/roomRouter';
 
 export const app = express();
 
-app.use(cors({ origin: /.*\.herokuapp\.com.*/, credentials: true }));
+app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
 app.use(express.json());
 app.use(session);
 

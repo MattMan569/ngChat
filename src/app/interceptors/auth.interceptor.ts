@@ -42,6 +42,11 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private handle401(req: HttpRequest<any>, next: HttpHandler) {
+    // Do not handle login errors
+    if (req.url.includes('/api/user/login')) {
+      return next.handle(req);
+    }
+
     // Wait for the token to refresh then add it to the req's header
     if (this.isRefreshingToken) {
       return this.accessTokenSubject.pipe(
